@@ -15,12 +15,12 @@
 </template>
 
 <script setup lang="ts">
-import { TypographyParagraph } from '@arco-design/web-vue';
-import { HtmlNodeModel } from '@logicflow/core';
-import { computed } from 'vue';
-import CirclePlus from '../icons/CirclePlus.vue';
-import { NodeType } from '../common';
-import { initConfigNodeData } from '../utils/inital';
+import { TypographyParagraph } from '@arco-design/web-vue'
+import { HtmlNodeModel } from '@logicflow/core'
+import { computed } from 'vue'
+import CirclePlus from '../icons/CirclePlus.vue'
+import { NodeType } from '../common'
+import { initConfigNodeData } from '../utils/inital'
 
 const props = defineProps({
   properties: {
@@ -33,25 +33,29 @@ const props = defineProps({
   },
   isSelected: Boolean,
   isHovered: Boolean,
-});
+})
 
-const isActive = computed(() => props.isHovered || props.isSelected);
+const isActive = computed(() => props.isHovered || props.isSelected)
 
 function addNode() {
-  const node = props.model.graphModel.addNode({
+  const nodeId = props.model.id
+  const graphModel = props.model.graphModel
+  const newNode = graphModel.addNode({
     type: 'config-node',
     x: 600,
     y: 100,
     properties: {
       type: NodeType.Model,
+      parentId: nodeId,
       ...initConfigNodeData('NI-VISA'),
     },
-  });
-  props.model.graphModel.addEdge({
+  })
+  graphModel.addEdge({
     type: 'polyline',
-    sourceNodeId: props.model.id,
-    targetNodeId: node.id,
-  });
+    sourceNodeId: nodeId,
+    targetNodeId: newNode.id,
+  })
+  graphModel.eventCenter.emit('custom:layout', {})
 }
 </script>
 
