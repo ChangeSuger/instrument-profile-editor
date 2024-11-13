@@ -32,7 +32,12 @@ export type ModelNodeData = {
   configType: ConfigType;
 }
 
-export type ConfigNodeData = ConfigNodeDataMap[keyof ConfigNodeDataMap];
+export type ConfigNodeData =
+  Omit<ConfigNodeDataMap['NI-VISA'], 'id'> &
+  Omit<ConfigNodeDataMap['FUNCTION'], 'id'> &
+  Omit<ConfigNodeDataMap['CUSTOM'], 'id'> & {
+    id: ConfigType;
+  };
 
 export type ConfigNodeDataMap = {
   'NI-VISA': {
@@ -103,7 +108,7 @@ export type ConfigNodeDataMap = {
   }
 }
 
-export type OperationNodeData = OperationNodeDataMap[keyof OperationNodeDataMap];
+export type OperationNodeData = OperationNodeDataMap['NI-VISA'] & OperationNodeDataMap['FUNCTION'] & OperationNodeDataMap['CUSTOM'];
 
 export type OperationNodeDataMap = {
   'NI-VISA': {

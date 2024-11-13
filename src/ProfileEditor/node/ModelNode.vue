@@ -47,7 +47,7 @@ function addNode() {
     properties: {
       type: NodeType.Model,
       parentId: nodeId,
-      ...initConfigNodeData('NI-VISA'),
+      ...initConfigNodeData(),
     },
   })
   graphModel.addEdge({

@@ -47,7 +47,7 @@ function addNode() {
     properties: {
       type: NodeType.Model,
       parentId: nodeId,
-      ...initOperationNodeData(props.properties.configType),
+      ...initOperationNodeData(),
     },
   })
   graphModel.addEdge({
