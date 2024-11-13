@@ -47,60 +47,60 @@ export type ConfigNodeDataMap = {
   }
   'CUSTOM': {
     id: 'CUSTOM';
-  } & (
-    {
-      communicationType: 'RS232' | 'RS485';
-      communicationConfig: {
-        /**
-         * 波特率
-         */
-        baudRate: string;
-        /**
-         * 数据位
-         */
-        dataBits: string;
-        /**
-         * 停止位
-         * - `0`: None
-         * - `1`: One
-         * - `2`: Two
-         * - `3`: OnePointFive
-         */
-        stopBits: string;
-        /**
-         * 奇偶校验
-         * - `0`: None
-         * - `1`: Odd
-         * - `2`: Even
-         * - `3`: Mark
-         * - `4`: Space
-         */
-        parity: string;
-        /**
-         * 缓冲区字节数
-         */
-        bufferBytes: string;
-        /**
-         * 握手协议
-         * - `0`: None
-         * - `1`: Xon/Xoff
-         * - `2`: RequestToSend
-         * - `3`: RequestToSendXonXoff
-         */
-        handShake: string;
-        /**
-         * 超时时间
-         */
-        timeout: string;
-      }
-    } | {
-      communicationType: 'TCP';
-      communicationConfig: {
-        ip: string;
-        port: string;
-      }
+  } & {
+    communicationType: 'RS232' | 'RS485' | 'TCP';
+    communicationConfig: {
+      /**
+       * 波特率
+       */
+      baudRate: string;
+      /**
+       * 数据位
+       */
+      dataBits: string;
+      /**
+       * 停止位
+       * - `0`: None
+       * - `1`: One
+       * - `2`: Two
+       * - `3`: OnePointFive
+       */
+      stopBits: string;
+      /**
+       * 奇偶校验
+       * - `0`: None
+       * - `1`: Odd
+       * - `2`: Even
+       * - `3`: Mark
+       * - `4`: Space
+       */
+      parity: string;
+      /**
+       * 缓冲区字节数
+       */
+      bufferBytes: string;
+      /**
+       * 握手协议
+       * - `0`: None
+       * - `1`: Xon/Xoff
+       * - `2`: RequestToSend
+       * - `3`: RequestToSendXonXoff
+       */
+      handShake: string;
+      /**
+       * 超时时间
+       */
+      timeout: string;
+      /**
+       * IP 地址
+       */
+      ip: string;
+      /**
+       * 端口号
+       */
+      port: string;
     }
-  )
+  }
 }
 
 export type OperationNodeData = OperationNodeDataMap[keyof OperationNodeDataMap];

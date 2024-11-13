@@ -14,32 +14,26 @@ import { ref, onMounted } from 'vue';
 import LogicFlow from '@logicflow/core';
 import "@logicflow/core/lib/style/index.css";
 
+import { InstrumentNode, ModelNode, ConfigNode, OperationNode } from './node';
+
+import { NodeType } from './common';
+
 const lf = ref<LogicFlow>();
 
 const data = {
   nodes: [
     {
-      id: '21',
-      type: 'rect',
+      id: '11',
+      type: 'instrument-node',
       x: 100,
-      y: 200,
-      text: 'rect node',
-    },
-    {
-      id: '50',
-      type: 'circle',
-      x: 300,
-      y: 400,
-      text: 'circle node',
+      y: 100,
+      properties: {
+        type: NodeType.Instrument,
+        id: '',
+      }
     },
   ],
-  edges: [
-    {
-      type: 'polyline',
-      sourceNodeId: '50',
-      targetNodeId: '21',
-    },
-  ],
+  edges: [],
 }
 
 onMounted(() => {
@@ -49,7 +43,14 @@ onMounted(() => {
     stopScrollGraph: false,
     stopZoomGraph: false,
     grid: false,
+    adjustEdge: false,
+    adjustNodePosition: false,
+    // hideAnchors: true,
+    nodeTextEdit: false,
+    edgeTextEdit: false,
+    textEdit: false,
   });
+  lf.value.batchRegister([InstrumentNode, ModelNode, ConfigNode, OperationNode]);
   lf.value.render(data);
 });
 </script>
@@ -73,5 +74,14 @@ onMounted(() => {
 #lf-container {
   width: 100%;
   height: 100%;
+}
+</style>
+
+<style lang="scss">
+.lf-anchor {
+  display: none;
+}
+foreignObject {
+  overflow: visible;
 }
 </style>

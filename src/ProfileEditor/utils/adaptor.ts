@@ -85,6 +85,8 @@ export function xmlData2ProfileData(xmlProfileData: XMLProfileData): ProfileData
               bufferBytes: communicationConfig['缓冲区字节数'][0],
               handShake: communicationConfig['握手协议'][0],
               timeout: communicationConfig['超时时间'][0],
+              ip: '',
+              port: '',
             },
             operations: (xmlConfigData as XMLConfigDataMap['CUSTOM'])['操作'].map((xmlOperationData) => {
               return {
@@ -118,6 +120,13 @@ export function xmlData2ProfileData(xmlProfileData: XMLProfileData): ProfileData
             id: xmlConfigData.$.id,
             communicationType,
             communicationConfig: {
+              baudRate: '',
+              dataBits: '',
+              stopBits: '',
+              parity: '',
+              bufferBytes: '',
+              handShake: '',
+              timeout: '',
               ip: communicationConfig['IP'][0],
               port: communicationConfig['端口'][0],
             },
@@ -241,9 +250,7 @@ export function profileData2XmlData(profileData: ProfileData): XMLProfileData {
               '超时时间': [modelData.CUSTOM.communicationConfig.timeout],
             }
             : {
-              // @ts-expect-error 这个类型定义太麻烦了
               'IP': [modelData.CUSTOM.communicationConfig.ip],
-              // @ts-expect-error 这个类型定义太麻烦了
               '端口': [modelData.CUSTOM.communicationConfig.port],
             }
           ),
