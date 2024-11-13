@@ -80,7 +80,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ConfigNodeData } from '@/ProfileEditor/types';
+import type { ConfigNodeData } from '../../types';
 import type { PropType } from 'vue';
 
 defineProps({

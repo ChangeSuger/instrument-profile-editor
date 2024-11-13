@@ -7,15 +7,15 @@
 </template>
 
 <script setup lang="ts">
-import type { InstrumentNodeData } from '@/ProfileEditor/types';
-import type { PropType } from 'vue';
+import type { InstrumentNodeData } from '../../types'
+import type { PropType } from 'vue'
 
 defineProps({
   formData: {
     type: Object as PropType<InstrumentNodeData>,
     required: true,
-  }
-});
+  },
+})
 </script>
 
 <style scoped lang="scss"></style>

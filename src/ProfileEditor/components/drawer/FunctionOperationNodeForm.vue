@@ -12,19 +12,22 @@
         <a-radio value="false">否</a-radio>
       </a-radio-group>
     </a-form-item>
+
+    <MethodEditor :methods="formData.methods" />
   </a-form>
 </template>
 
 <script setup lang="ts">
-import type { OperationNodeData } from '@/ProfileEditor/types';
-import type { PropType } from 'vue';
+import type { OperationNodeData } from '../../types'
+import type { PropType } from 'vue'
+import MethodEditor from './MethodEditor/MethodEditor.vue';
 
 defineProps({
   formData: {
     type: Object as PropType<OperationNodeData>,
     required: true,
-  }
-});
+  },
+})
 </script>
 
 <style scoped lang="scss"></style>

@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import type { OperationNodeData } from '@/ProfileEditor/types';
+import type { OperationNodeData } from '../../types';
 import type { PropType } from 'vue';
 
 defineProps({

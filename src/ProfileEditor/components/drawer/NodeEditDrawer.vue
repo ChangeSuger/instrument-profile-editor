@@ -59,51 +59,55 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import LogicFlow from '@logicflow/core';
-import { NodeType } from '@/ProfileEditor/common';
-import { IconDelete } from '@arco-design/web-vue/es/icon';
+import { ref, computed } from 'vue'
+import LogicFlow from '@logicflow/core'
+import { NodeType } from '@/ProfileEditor/common'
+import { IconDelete } from '@arco-design/web-vue/es/icon'
 
-import InstrumentNodeForm from './InstrumentNodeForm.vue';
-import ModelNodeForm from './ModelNodeForm.vue';
-import ConfigNodeForm from './ConfigNodeForm.vue';
-import NiVisaOperationNodeForm from './NiVisaOperationNodeForm.vue';
-import FunctionOperationNodeForm from './FunctionOperationNodeForm.vue';
-import CustomOperationNodeForm from './CustomOperationNodeForm.vue';
+import InstrumentNodeForm from './InstrumentNodeForm.vue'
+import ModelNodeForm from './ModelNodeForm.vue'
+import ConfigNodeForm from './ConfigNodeForm.vue'
+import NiVisaOperationNodeForm from './NiVisaOperationNodeForm.vue'
+import FunctionOperationNodeForm from './FunctionOperationNodeForm.vue'
+import CustomOperationNodeForm from './CustomOperationNodeForm.vue'
 
-import type { InstrumentNodeData, ModelNodeData, ConfigNodeData, OperationNodeData } from '@/ProfileEditor/types';
+import type {
+  InstrumentNodeData,
+  ModelNodeData,
+  ConfigNodeData,
+  OperationNodeData,
+} from '../../types'
 
 const props = defineProps({
   lf: LogicFlow,
-});
+})
 
 defineExpose({
   openDrawer,
   closeDrawer,
-});
+})
 
-const nodeData = ref<LogicFlow.NodeData>();
+const nodeData = ref<LogicFlow.NodeData>()
 
 const nodeType = computed(() => {
-  return nodeData.value?.properties?.type;
-});
+  return nodeData.value?.properties?.type
+})
 
-const visible = ref(false);
+const visible = ref(false)
 
 function openDrawer(data: LogicFlow.NodeData) {
-  nodeData.value = data;
-  visible.value = true;
-};
+  nodeData.value = data
+  visible.value = true
+}
 
 function closeDrawer() {
-  visible.value = false;
+  visible.value = false
 }
 
 function handleConfirm() {
-  props.lf!.setProperties(nodeData.value!.id, nodeData.value!.properties!);
-  closeDrawer();
+  props.lf!.setProperties(nodeData.value!.id, nodeData.value!.properties!)
+  closeDrawer()
 }
-
 </script>
 
 <style scoped lang="scss">
@@ -134,8 +138,9 @@ function handleConfirm() {
   .node-editor-drawer-body {
     height: 0px;
     padding: 1rem;
+    padding-right: 0.5rem;
     flex: 1;
-    overflow: auto;
+    overflow-y: scroll;
   }
 
   .node-editor-drawer-footer {

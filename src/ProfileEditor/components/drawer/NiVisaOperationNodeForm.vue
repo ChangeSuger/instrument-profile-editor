@@ -19,15 +19,15 @@
 </template>
 
 <script setup lang="ts">
-import type { OperationNodeData } from '@/ProfileEditor/types';
-import type { PropType } from 'vue';
+import type { OperationNodeData } from '../../types'
+import type { PropType } from 'vue'
 
 defineProps({
   formData: {
     type: Object as PropType<OperationNodeData>,
     required: true,
-  }
-});
+  },
+})
 </script>
 
 <style scoped lang="scss"></style>

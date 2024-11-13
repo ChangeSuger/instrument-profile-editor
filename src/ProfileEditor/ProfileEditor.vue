@@ -136,13 +136,40 @@ onMounted(() => {
 </style>
 
 <style lang="scss">
-.lf-anchor {
-  display: none;
-}
-foreignObject {
-  overflow: visible;
-}
-.lf-edge {
-  pointer-events: none;
+#profile-editor {
+  .lf-anchor {
+    display: none;
+  }
+  foreignObject {
+    overflow: visible;
+  }
+  .lf-edge {
+    pointer-events: none;
+  }
+  .arco-collapse-item-content {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  ::-webkit-scrollbar {
+    border-radius: 1rem;
+    background: transparent;
+    width: 0.65rem;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border: 2px solid transparent;
+    border-radius: 0.65rem;
+    background: gray;
+    background-clip: content-box;
+
+    &:hover {
+      background: gray;
+    }
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
 }
 </style>
