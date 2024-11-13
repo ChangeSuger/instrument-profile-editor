@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import LF from '@/ProfileEditor/LF.vue';
+import LF from '@/ProfileEditor/ProfileEditor.vue';
 </script>
 
 <style scoped>

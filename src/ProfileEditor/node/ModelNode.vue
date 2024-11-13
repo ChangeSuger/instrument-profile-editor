@@ -45,7 +45,7 @@ function addNode() {
     x: 600,
     y: 100,
     properties: {
-      type: NodeType.Model,
+      type: NodeType.Config,
       parentId: nodeId,
       ...initConfigNodeData(),
     },

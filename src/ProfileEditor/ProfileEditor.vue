@@ -4,11 +4,13 @@
       <ControlPanel />
     </div>
     <div id="lf-container"></div>
+    <NodeEditDrawer :lf="lf" ref="nodeEditDrawerRef" />
   </div>
 </template>
 
 <script setup lang="ts">
-import ControlPanel from './ControlPanel.vue';
+import ControlPanel from './components/ControlPanel.vue';
+import NodeEditDrawer from './components/drawer/NodeEditDrawer.vue';
 
 import { ref, onMounted } from 'vue';
 import LogicFlow from '@logicflow/core';
@@ -19,6 +21,7 @@ import { InstrumentNode, ModelNode, ConfigNode, OperationNode } from './node';
 import { NodeType, POSITION_X } from './common';
 
 const lf = ref<LogicFlow>()
+const nodeEditDrawerRef = ref<InstanceType<typeof NodeEditDrawer>>();
 
 const data = {
   nodes: [
@@ -67,7 +70,7 @@ onMounted(() => {
         }
       }
       if (node.type === 'instrument-node') {
-        startNode = node;
+        startNode = node
       }
     })
 
@@ -94,25 +97,35 @@ onMounted(() => {
         })
       })
     }
-  })
+  });
 
-  lf.value.render(data)
-})
+  lf.value.on('node:click', ({data}) => {
+    nodeEditDrawerRef.value?.openDrawer(data);
+  });
+
+  lf.value.on('blank:click', () => {
+    nodeEditDrawerRef.value?.closeDrawer();
+  });
+
+  lf.value.render(data);
+});
 </script>
 
 <style scoped lang="scss">
 #profile-editor {
+  position: relative;
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  color: #4E5969;
 }
 
 .control-panel {
   position: absolute;
-  top: 2rem;
-  left: 2rem;
+  top: 1rem;
+  left: 1rem;
   z-index: 1;
 }
 

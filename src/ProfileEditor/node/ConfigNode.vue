@@ -19,8 +19,9 @@ import { TypographyParagraph } from '@arco-design/web-vue'
 import { HtmlNodeModel } from '@logicflow/core'
 import { computed } from 'vue'
 import CirclePlus from '../icons/CirclePlus.vue'
-import { NodeType } from '../common'
+import { NodeType, OPERATION_NODE_TYPE_MAP } from '../common'
 import { initOperationNodeData } from '../utils/inital'
+import type { ConfigType } from '../types'
 
 const props = defineProps({
   properties: {
@@ -40,12 +41,13 @@ const isActive = computed(() => props.isHovered || props.isSelected)
 function addNode() {
   const nodeId = props.model.id
   const graphModel = props.model.graphModel
+  const configType = props.model.properties.id as ConfigType
   const newNode = graphModel.addNode({
     type: 'operation-node',
     x: 850,
     y: 100,
     properties: {
-      type: NodeType.Model,
+      type: OPERATION_NODE_TYPE_MAP[configType],
       parentId: nodeId,
       ...initOperationNodeData(),
     },

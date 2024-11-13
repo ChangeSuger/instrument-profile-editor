@@ -7,6 +7,12 @@ export enum NodeType {
   CUSTOM_OPERATION = 'CUSTOM_OPERATION',
 }
 
+export const OPERATION_NODE_TYPE_MAP = {
+  'NI-VISA': NodeType.NI_VISA_OPERATION,
+  'FUNCTION': NodeType.FUNCTION_OPERATION,
+  'CUSTOM': NodeType.CUSTOM_OPERATION,
+} as const;
+
 export const POSITION_X = {
   'instrument-node': 100,
   'model-node': 350,

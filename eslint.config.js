@@ -16,4 +16,9 @@ export default [
   ...pluginVue.configs['flat/essential'],
   ...vueTsEslintConfig(),
   skipFormatting,
+  {
+    rules: {
+      'vue/no-mutating-props': 0,
+    }
+  }
 ]
