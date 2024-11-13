@@ -1,6 +1,7 @@
 import { HtmlNode, HtmlNodeModel, type IHtmlNodeProps, type Model } from '@logicflow/core';
 import ModelNode from './ModelNode.vue';
 import { createApp, h, ref } from 'vue';
+import { NODE_WIDTH, NODE_HEIGHT } from '../common';
 
 class ModelNodeView extends HtmlNode {
   root: HTMLDivElement;
@@ -61,8 +62,8 @@ class ModelNodeView extends HtmlNode {
 
 class ModelNodeModel extends HtmlNodeModel {
   setAttributes() {
-    this.width = 150;
-    this.height = 30;
+    this.width = NODE_WIDTH;
+    this.height = NODE_HEIGHT;
   }
 
   getDefaultAnchor(): Model.AnchorConfig[] {

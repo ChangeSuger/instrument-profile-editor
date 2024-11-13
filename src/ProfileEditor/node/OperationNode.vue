@@ -14,9 +14,9 @@
 <script setup lang="ts">
 import { TypographyParagraph } from '@arco-design/web-vue';
 import { GraphModel, BaseNodeModel } from '@logicflow/core';
-import { computed } from 'vue';
+// import { computed } from 'vue';
 
-const props = defineProps({
+defineProps({
   properties: {
     type: Object,
     required: true,
@@ -33,7 +33,7 @@ const props = defineProps({
   isHovered: Boolean,
 });
 
-const isActive = computed(() => props.isHovered || props.isSelected);
+// const isActive = computed(() => props.isHovered || props.isSelected);
 </script>
 
 <style scoped lang="scss">

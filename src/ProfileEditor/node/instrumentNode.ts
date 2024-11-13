@@ -1,6 +1,7 @@
 import { HtmlNode, HtmlNodeModel, type IHtmlNodeProps, type Model } from '@logicflow/core';
 import InstrumentNode from './InstrumentNode.vue';
 import { createApp, h, ref } from 'vue';
+import { NODE_WIDTH, NODE_HEIGHT } from '../common';
 
 class InstrumentNodeView extends HtmlNode {
   root: HTMLDivElement;
@@ -61,8 +62,8 @@ class InstrumentNodeView extends HtmlNode {
 
 class InstrumentNodeModel extends HtmlNodeModel {
   setAttributes() {
-    this.width = 150;
-    this.height = 30;
+    this.width = NODE_WIDTH;
+    this.height = NODE_HEIGHT;
   }
 
   getDefaultAnchor(): Model.AnchorConfig[] {

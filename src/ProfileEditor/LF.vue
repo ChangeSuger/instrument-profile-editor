@@ -8,15 +8,15 @@
 </template>
 
 <script setup lang="ts">
-import ControlPanel from './ControlPanel.vue'
+import ControlPanel from './ControlPanel.vue';
 
-import { ref, onMounted } from 'vue'
-import LogicFlow from '@logicflow/core'
-import '@logicflow/core/lib/style/index.css'
+import { ref, onMounted } from 'vue';
+import LogicFlow from '@logicflow/core';
+import '@logicflow/core/lib/style/index.css';
 
-import { InstrumentNode, ModelNode, ConfigNode, OperationNode } from './node'
+import { InstrumentNode, ModelNode, ConfigNode, OperationNode } from './node';
 
-import { NodeType, POSITION_X } from './common'
+import { NodeType, POSITION_X } from './common';
 
 const lf = ref<LogicFlow>()
 
