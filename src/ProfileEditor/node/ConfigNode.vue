@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import { TypographyParagraph } from '@arco-design/web-vue';
-import { GraphModel, BaseNodeModel } from '@logicflow/core';
+import { HtmlNodeModel } from '@logicflow/core';
 import { computed } from 'vue';
 import CirclePlus from '../icons/CirclePlus.vue';
 import { NodeType } from '../common';
@@ -27,12 +27,8 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  graphModel: {
-    type: GraphModel,
-    required: true,
-  },
   model: {
-    type: BaseNodeModel,
+    type: HtmlNodeModel,
     required: true,
   },
   isSelected: Boolean,
@@ -42,7 +38,7 @@ const props = defineProps({
 const isActive = computed(() => props.isHovered || props.isSelected);
 
 function addNode() {
-  const node = props.graphModel.addNode({
+  const node = props.model.graphModel.addNode({
     type: 'operation-node',
     x: 850,
     y: 100,
@@ -51,7 +47,7 @@ function addNode() {
       ...initOperationNodeData(props.properties.configType),
     },
   });
-  props.graphModel.addEdge({
+  props.model.graphModel.addEdge({
     type: 'polyline',
     sourceNodeId: props.model.id,
     targetNodeId: node.id,
@@ -117,8 +113,8 @@ function addNode() {
     }
 
     .add-node-icon {
-      width: 20px;
-      height: 20px;
+      width: 30px;
+      height: 30px;
       fill: rgb(146, 198, 146);
       stroke: white;
 

@@ -1,4 +1,4 @@
-import { HtmlNode, HtmlNodeModel, type IHtmlNodeProps, type Model, GraphModel, BaseNodeModel } from '@logicflow/core';
+import { HtmlNode, HtmlNodeModel, type IHtmlNodeProps, type Model } from '@logicflow/core';
 import InstrumentNode from './InstrumentNode.vue';
 import { createApp, h, ref } from 'vue';
 
@@ -10,8 +10,7 @@ class InstrumentNodeView extends HtmlNode {
     properties: object;
     isSelected: boolean;
     isHovered: boolean;
-    graphModel: GraphModel;
-    model: BaseNodeModel;
+    model: HtmlNodeModel;
   }>> | null = null;
 
   constructor(props: IHtmlNodeProps) {
@@ -42,7 +41,6 @@ class InstrumentNodeView extends HtmlNode {
         properties: this.props.model.properties,
         isSelected: this.props.model.isSelected,
         isHovered: this.props.model.isHovered,
-        graphModel: this.props.graphModel,
         model: this.props.model
       }
     } else {
@@ -51,7 +49,6 @@ class InstrumentNodeView extends HtmlNode {
         properties: this.props.model.properties,
         isSelected: this.props.model.isSelected,
         isHovered: this.props.model.isHovered,
-        graphModel: this.props.graphModel,
         model: this.props.model,
       });
       this.vm = createApp({
