@@ -20,23 +20,23 @@ export function xmlData2ProfileData(xmlProfileData: XMLProfileData): ProfileData
     models: [],
   };
 
-  for (const xmlModelData of xmlProfileData['设备类别']['型号']) {
+  for (const xmlModelData of xmlProfileData['设备类别']['型号'] ?? []) {
     const modelData: ModelData = {
       id: xmlModelData.$.id,
       configType: xmlModelData['配置方式'][0],
     }
-    for (const xmlConfigData of xmlModelData['配置']) {
+    for (const xmlConfigData of xmlModelData['配置'] ?? []) {
       if (xmlConfigData.$.id === 'NI-VISA') {
         const configData: ModelData['NI-VISA'] = {
           id: xmlConfigData.$.id,
-          operations: (xmlConfigData as XMLConfigDataMap['NI-VISA'])['操作'].map((xmlOperationData) => {
+          operations: (xmlConfigData as XMLConfigDataMap['NI-VISA'])['操作']?.map((xmlOperationData) => {
             return {
               id: xmlOperationData.$.id,
               parameter: xmlOperationData.$.Parameter,
               hasReturn: xmlOperationData.$.HasReturn,
               command: xmlOperationData['指令'][0],
             }
-          }),
+          }) || [],
         }
         if (!modelData['NI-VISA']) {
           modelData['NI-VISA'] = configData;
@@ -50,12 +50,12 @@ export function xmlData2ProfileData(xmlProfileData: XMLProfileData): ProfileData
           className,
           dllTemplate,
           isVisa: (xmlConfigData as XMLConfigDataMap['FUNCTION'])['类'][0].$.IsVISA,
-          operations: (xmlConfigData as XMLConfigDataMap['FUNCTION'])['操作'].map((xmlOperationData) => {
+          operations: (xmlConfigData as XMLConfigDataMap['FUNCTION'])['操作']?.map((xmlOperationData) => {
             return {
               id: xmlOperationData.$.id,
               parameter: xmlOperationData.$.Parameter,
               hasReturn: xmlOperationData.$.HasReturn,
-              methods: xmlOperationData['方法'].map(xmlMethodData => {
+              methods: xmlOperationData['方法']?.map(xmlMethodData => {
                 return {
                   name: xmlMethodData.$.Name,
                   parameters: xmlMethodData['参数']?.map(xmlParameterData => {
@@ -65,9 +65,9 @@ export function xmlData2ProfileData(xmlProfileData: XMLProfileData): ProfileData
                     }
                   }) || [],
                 }
-              })
+              }) || [],
             }
-          }),
+          }) || [],
         };
         if (!modelData.FUNCTION) {
           modelData.FUNCTION = configData;
@@ -91,27 +91,27 @@ export function xmlData2ProfileData(xmlProfileData: XMLProfileData): ProfileData
               ip: '',
               port: '',
             },
-            operations: (xmlConfigData as XMLConfigDataMap['CUSTOM'])['操作'].map((xmlOperationData) => {
+            operations: (xmlConfigData as XMLConfigDataMap['CUSTOM'])['操作']?.map((xmlOperationData) => {
               return {
                 id: xmlOperationData.$.id,
-                measureModes: xmlOperationData['测量模式'].map(xmlMeasureModeData => {
+                measureModes: xmlOperationData['测量模式']?.map(xmlMeasureModeData => {
                   return {
                     id: xmlMeasureModeData.$.id,
-                    workplaces: xmlMeasureModeData['工位'].map(xmlWorkplaceData => {
+                    workplaces: xmlMeasureModeData['工位']?.map(xmlWorkplaceData => {
                       return {
                         id: xmlWorkplaceData.$.id,
-                        byteStreams: xmlWorkplaceData['字节流'].map(xmlByteStreamData => {
+                        byteStreams: xmlWorkplaceData['字节流']?.map(xmlByteStreamData => {
                           return {
                             send: xmlByteStreamData.$.send,
                             receive: xmlByteStreamData.$.receive,
                           }
-                        })
+                        }) || [],
                       }
-                    })
+                    }) || [],
                   }
-                })
+                }) || [],
               }
-            }),
+            }) || [],
           }
           if (!modelData.CUSTOM) {
             modelData.CUSTOM = configData;
@@ -133,27 +133,27 @@ export function xmlData2ProfileData(xmlProfileData: XMLProfileData): ProfileData
               ip: communicationConfig['IP'][0],
               port: communicationConfig['端口'][0],
             },
-            operations: (xmlConfigData as XMLConfigDataMap['CUSTOM'])['操作'].map((xmlOperationData) => {
+            operations: (xmlConfigData as XMLConfigDataMap['CUSTOM'])['操作']?.map((xmlOperationData) => {
               return {
                 id: xmlOperationData.$.id,
-                measureModes: xmlOperationData['测量模式'].map(xmlMeasureModeData => {
+                measureModes: xmlOperationData['测量模式']?.map(xmlMeasureModeData => {
                   return {
                     id: xmlMeasureModeData.$.id,
-                    workplaces: xmlMeasureModeData['工位'].map(xmlWorkplaceData => {
+                    workplaces: xmlMeasureModeData['工位']?.map(xmlWorkplaceData => {
                       return {
                         id: xmlWorkplaceData.$.id,
-                        byteStreams: xmlWorkplaceData['字节流'].map(xmlByteStreamData => {
+                        byteStreams: xmlWorkplaceData['字节流']?.map(xmlByteStreamData => {
                           return {
                             send: xmlByteStreamData.$.send,
                             receive: xmlByteStreamData.$.receive,
                           }
-                        })
+                        }) || [],
                       }
-                    })
+                    }) || [],
                   }
-                })
+                }) || [],
               }
-            }),
+            }) || [],
           }
           if (!modelData.CUSTOM) {
             modelData.CUSTOM = configData;
@@ -179,7 +179,7 @@ export function profileData2XmlData(profileData: ProfileData): XMLProfileData {
     }
   }
 
-  for (const modelData of profileData.models) {
+  for (const modelData of profileData.models ?? []) {
     const xmlModelData: XMLModelData = {
       $: { id: modelData.id },
       '配置方式': [modelData.configType],
@@ -188,7 +188,7 @@ export function profileData2XmlData(profileData: ProfileData): XMLProfileData {
     if (modelData['NI-VISA']) {
       const xmlConfigData: XMLConfigDataMap['NI-VISA'] = {
         $: { id: 'NI-VISA' },
-        '操作': modelData['NI-VISA'].operations.map(operationData => {
+        '操作': modelData['NI-VISA'].operations?.map(operationData => {
           return {
             $: {
               id: operationData.id,
@@ -210,17 +210,17 @@ export function profileData2XmlData(profileData: ProfileData): XMLProfileData {
             IsVISA: modelData.FUNCTION.isVisa,
           }
         }],
-        '操作': modelData.FUNCTION.operations.map(operationData => {
+        '操作': modelData.FUNCTION.operations?.map(operationData => {
           return {
             $: {
               id: operationData.id,
               Parameter: operationData.parameter,
               HasReturn: operationData.hasReturn,
             },
-            '方法': operationData.methods.map(methodData => {
+            '方法': operationData.methods?.map(methodData => {
               return {
                 $: { Name: methodData.name },
-                '参数': methodData.parameters.map(parameterData => {
+                '参数': methodData.parameters?.map(parameterData => {
                   return {
                     $: {
                       Type: parameterData.type,
@@ -258,16 +258,16 @@ export function profileData2XmlData(profileData: ProfileData): XMLProfileData {
             }
           ),
         }],
-        '操作': modelData.CUSTOM.operations.map(operationData => {
+        '操作': modelData.CUSTOM.operations?.map(operationData => {
           return {
             $: { id: operationData.id },
-            '测量模式': operationData.measureModes.map(measureModeData => {
+            '测量模式': operationData.measureModes?.map(measureModeData => {
               return {
                 $: { id: measureModeData.id },
-                '工位': measureModeData.workplaces.map(workplaceData => {
+                '工位': measureModeData.workplaces?.map(workplaceData => {
                   return {
                     $: { id: workplaceData.id },
-                    '字节流': workplaceData.byteStreams.map(byteStreamData => {
+                    '字节流': workplaceData.byteStreams?.map(byteStreamData => {
                       return {
                         $: {
                           send: byteStreamData.send,
@@ -312,7 +312,7 @@ export function adaptorIn(profileData: ProfileData): LogicFlow.GraphData {
 
   graphData.nodes.push(instrumentNode);
 
-  for (const modelData of profileData.models) {
+  for (const modelData of profileData.models ?? []) {
     const modelNode = {
       id: uuidv4(),
       type: 'model-node',
@@ -346,7 +346,7 @@ export function adaptorIn(profileData: ProfileData): LogicFlow.GraphData {
       graphData.nodes.push(configNode);
       graphData.edges.push(initEdgeData(modelNode.id, configNode.id));
 
-      for (const operationData of modelData['NI-VISA'].operations) {
+      for (const operationData of modelData['NI-VISA'].operations ?? []) {
         const operationNode = {
           id: uuidv4(),
           type: 'operation-node',
@@ -389,7 +389,7 @@ export function adaptorIn(profileData: ProfileData): LogicFlow.GraphData {
       graphData.nodes.push(configNode);
       graphData.edges.push(initEdgeData(modelNode.id, configNode.id));
 
-      for (const operationData of modelData.FUNCTION.operations) {
+      for (const operationData of modelData.FUNCTION.operations ?? []) {
         const operationNode = {
           id: uuidv4(),
           type: 'operation-node',
@@ -430,7 +430,7 @@ export function adaptorIn(profileData: ProfileData): LogicFlow.GraphData {
       graphData.nodes.push(configNode);
       graphData.edges.push(initEdgeData(modelNode.id, configNode.id));
 
-      for (const operationData of modelData.CUSTOM.operations) {
+      for (const operationData of modelData.CUSTOM.operations ?? []) {
         const operationNode = {
           id: uuidv4(),
           type: 'operation-node',

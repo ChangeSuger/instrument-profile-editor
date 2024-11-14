@@ -21,11 +21,11 @@
       <span class="control-button-text">重置</span>
     </a-button>
     <a-button class="control-button" @click="handleFoldAll">
-      <img class="control-button-icon" src="../assets/fold-horizontal.svg" />
+      <img class="control-button-icon" src="../assets/minimize.svg" />
       <span class="control-button-text">折叠</span>
     </a-button>
     <a-button class="control-button" @click="handleUnfoldAll">
-      <img class="control-button-icon" src="../assets/unfold-horizontal.svg" />
+      <img class="control-button-icon" src="../assets/maximize.svg" />
       <span class="control-button-text">展开</span>
     </a-button>
   </a-space>
