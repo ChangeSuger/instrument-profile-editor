@@ -51,17 +51,18 @@ const props = defineProps({
   },
 });
 
+function getByteStreamDataInit() {
+  return {
+    send: '0x00',
+    receive: '0x00',
+  };
+}
+
 function addByteStream(index?: number) {
   if (index !== undefined) {
-    props.byteStreams.splice(index + 1, 0, {
-      send: '0x00',
-      receive: '0x00',
-    });
+    props.byteStreams.splice(index + 1, 0, getByteStreamDataInit());
   } else {
-    props.byteStreams.push({
-      send: '0x00',
-      receive: '0x00',
-    });
+    props.byteStreams.push(getByteStreamDataInit());
   }
 }
 

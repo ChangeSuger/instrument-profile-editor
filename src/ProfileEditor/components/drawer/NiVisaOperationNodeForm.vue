@@ -7,10 +7,7 @@
       <a-input v-model="formData.parameter" allow-clear />
     </a-form-item>
     <a-form-item label="是否有返回值" v-model="formData.hasReturn">
-      <a-radio-group type="button" v-model="formData.hasReturn">
-        <a-radio value="true">是</a-radio>
-        <a-radio value="false">否</a-radio>
-      </a-radio-group>
+      <a-radio-group type="button" v-model="formData.hasReturn" :options="BOOLEAN_STRING_OPTIONS" />
     </a-form-item>
     <a-form-item label="指令" v-model="formData.command">
       <a-textarea v-model="formData.command" allow-clear />
@@ -21,6 +18,7 @@
 <script setup lang="ts">
 import type { OperationNodeData } from '../../types'
 import type { PropType } from 'vue'
+import { BOOLEAN_STRING_OPTIONS } from '../../common';
 
 defineProps({
   formData: {

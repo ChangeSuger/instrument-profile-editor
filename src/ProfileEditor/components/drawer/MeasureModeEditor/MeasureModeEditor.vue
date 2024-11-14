@@ -60,17 +60,18 @@ const props = defineProps({
   },
 });
 
+function getMeasureModeDataInit(): MeasureMode {
+  return {
+    id: '',
+    workplaces: [],
+  };
+}
+
 function addMeasureMode(index?: number) {
   if (index !== undefined) {
-    props.measureModes.splice(index + 1, 0, {
-      id: '',
-      workplaces: [],
-    });
+    props.measureModes.splice(index + 1, 0, getMeasureModeDataInit());
   } else {
-    props.measureModes.push({
-      id: '',
-      workplaces: [],
-    });
+    props.measureModes.push(getMeasureModeDataInit());
   }
 }
 

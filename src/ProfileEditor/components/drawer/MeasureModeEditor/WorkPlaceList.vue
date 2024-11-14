@@ -52,7 +52,6 @@ import type { Workplace } from '../../../types';
 import { IconDelete, IconPlus, IconArrowUp, IconArrowDown } from '@arco-design/web-vue/es/icon';
 import ByteStreamForm from './ByteStreamForm.vue';
 
-
 const props = defineProps({
   workplaces: {
     type: Array as PropType<Workplace[]>,
@@ -60,17 +59,18 @@ const props = defineProps({
   },
 });
 
+function getWorkplaceDataInit(): Workplace {
+  return {
+    id: '',
+    byteStreams: [],
+  };
+}
+
 function addWorkplace(index?: number) {
   if (index !== undefined) {
-    props.workplaces.splice(index + 1, 0, {
-      id: '',
-      byteStreams: [],
-    });
+    props.workplaces.splice(index + 1, 0, getWorkplaceDataInit());
   } else {
-    props.workplaces.push({
-      id: '',
-      byteStreams: [],
-    });
+    props.workplaces.push(getWorkplaceDataInit());
   }
 }
 

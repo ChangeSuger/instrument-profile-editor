@@ -7,7 +7,7 @@
       <a-radio-group
         type="button"
         v-model="formData.configType"
-        :options="['NI-VISA', 'FUNCTION', 'CUSTOM']"
+        :options="CONFIG_TYPE_OPTIONS"
       />
     </a-form-item>
   </a-form>
@@ -16,6 +16,7 @@
 <script setup lang="ts">
 import type { ModelNodeData } from '../../types'
 import type { PropType } from 'vue'
+import { CONFIG_TYPE_OPTIONS } from '../../common';
 
 defineProps({
   formData: {

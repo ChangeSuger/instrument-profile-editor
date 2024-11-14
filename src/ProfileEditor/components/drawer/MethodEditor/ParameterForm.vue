@@ -20,12 +20,9 @@
           <a-input v-model="parameter.value" allow-clear size="mini">
             <template #prepend>
               <a-select :style="{ width: '100px' }" v-model="parameter.type" size="mini">
-                <a-option value="System.Boolean">Boolean</a-option>
-                <a-option value="System.Char">Char</a-option>
-                <a-option value="System.Double">Double</a-option>
-                <a-option value="System.Int32">Int32</a-option>
-                <a-option value="System.String">String</a-option>
-                <a-option value="System.Single">Single</a-option>
+                <a-option v-for="option in PARAMETER_TYPE_OPTIONS" :key="option.value" :value="option.value">
+                  {{ option.label }}
+                </a-option>
               </a-select>
             </template>
           </a-input>
@@ -45,6 +42,7 @@
 import { type PropType } from 'vue';
 import type { MethodData } from '../../../types';
 import { IconDelete, IconPlus } from '@arco-design/web-vue/es/icon';
+import { PARAMETER_TYPE_OPTIONS } from '../../../common';
 
 const props = defineProps({
   parameters: {
@@ -53,17 +51,18 @@ const props = defineProps({
   },
 });
 
+function getParameterDataInit() {
+  return {
+    type: 'System.String',
+    value: '',
+  };
+}
+
 function addParameter(index?: number) {
   if (index !== undefined) {
-    props.parameters.splice(index + 1, 0, {
-      type: 'System.String',
-      value: '',
-    });
+    props.parameters.splice(index + 1, 0, getParameterDataInit());
   } else {
-    props.parameters.push({
-      type: 'System.String',
-      value: '',
-    });
+    props.parameters.push(getParameterDataInit());
   }
 }
 

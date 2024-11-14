@@ -60,17 +60,18 @@ const props = defineProps({
   },
 });
 
+function getMethodDataInit(): MethodData {
+  return {
+    name: '',
+    parameters: [],
+  };
+}
+
 function addMethod(index?: number) {
   if (index !== undefined) {
-    props.methods.splice(index + 1, 0, {
-      name: '',
-      parameters: [],
-    });
+    props.methods.splice(index + 1, 0, getMethodDataInit());
   } else {
-    props.methods.push({
-      name: '',
-      parameters: [],
-    });
+    props.methods.push(getMethodDataInit());
   }
 }
 

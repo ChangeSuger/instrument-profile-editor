@@ -1,7 +1,7 @@
 <template>
   <a-form :model="formData" auto-label-width size="small">
     <a-form-item label="配置方式" v-model="formData.id">
-      <a-radio-group type="button" v-model="formData.id" :options="['NI-VISA', 'FUNCTION', 'CUSTOM']" />
+      <a-radio-group type="button" v-model="formData.id" :options="CONFIG_TYPE_OPTIONS" />
     </a-form-item>
 
     <template v-if="formData.id === 'FUNCTION'">
@@ -15,16 +15,13 @@
         <a-input v-model="formData.dllTemplate" allow-clear />
       </a-form-item>
       <a-form-item label="isVisa" v-model="formData.isVisa">
-        <a-radio-group type="button" v-model="formData.isVisa">
-          <a-radio value="true">是</a-radio>
-          <a-radio value="false">否</a-radio>
-        </a-radio-group>
+        <a-radio-group type="button" v-model="formData.isVisa" :options="BOOLEAN_STRING_OPTIONS" />
       </a-form-item>
     </template>
 
     <template v-if="formData.id === 'CUSTOM'">
       <a-form-item label="通信方法" v-model="formData.communicationType">
-        <a-radio-group type="button" v-model="formData.communicationType" :options="['RS232', 'RS485', 'TCP']" />
+        <a-radio-group type="button" v-model="formData.communicationType" :options="COMMUNICATION_TYPE_OPTIONS" />
       </a-form-item>
 
       <template v-if="formData.communicationType === 'TCP'">
@@ -44,32 +41,16 @@
           <a-input v-model="formData.communicationConfig.dataBits" allow-clear />
         </a-form-item>
         <a-form-item label="停止位" v-model="formData.communicationConfig.stopBits">
-          <a-select v-model="formData.communicationConfig.stopBits">
-            <a-option value="0">None</a-option>
-            <a-option value="1">One</a-option>
-            <a-option value="2">Two</a-option>
-            <a-option value="3">OnePointFive</a-option>
-          </a-select>
+          <a-select v-model="formData.communicationConfig.stopBits" :options="STOP_BITS_OPTIONS" />
         </a-form-item>
         <a-form-item label="奇偶校验" v-model="formData.communicationConfig.parity">
-          <a-select v-model="formData.communicationConfig.parity">
-            <a-option value="0">None</a-option>
-            <a-option value="1">Odd</a-option>
-            <a-option value="2">Even</a-option>
-            <a-option value="3">Mark</a-option>
-            <a-option value="4">Space</a-option>
-          </a-select>
+          <a-select v-model="formData.communicationConfig.parity" :options="PARITY_OPTIONS" />
         </a-form-item>
         <a-form-item label="缓冲区字节数" v-model="formData.communicationConfig.bufferBytes">
           <a-input v-model="formData.communicationConfig.bufferBytes" allow-clear />
         </a-form-item>
         <a-form-item label="握手协议" v-model="formData.communicationConfig.handShake">
-          <a-select v-model="formData.communicationConfig.handShake">
-            <a-option value="0">None</a-option>
-            <a-option value="1">Xon/Xoff</a-option>
-            <a-option value="2">RequestToSend</a-option>
-            <a-option value="3">RequestToSendXonXoff</a-option>
-          </a-select>
+          <a-select v-model="formData.communicationConfig.handShake" :options="HAND_SHAKE_OPTIONS" />
         </a-form-item>
         <a-form-item label="超时时间" v-model="formData.communicationConfig.timeout">
           <a-input v-model="formData.communicationConfig.timeout" allow-clear />
@@ -82,6 +63,7 @@
 <script setup lang="ts">
 import type { ConfigNodeData } from '../../types';
 import type { PropType } from 'vue';
+import { CONFIG_TYPE_OPTIONS, COMMUNICATION_TYPE_OPTIONS, PARITY_OPTIONS, HAND_SHAKE_OPTIONS, STOP_BITS_OPTIONS, BOOLEAN_STRING_OPTIONS } from '../../common';
 
 defineProps({
   formData: {
