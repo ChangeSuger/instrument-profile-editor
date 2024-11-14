@@ -9,6 +9,7 @@
         ok-text="删除"
         :ok-button-props="{ status: 'danger' }"
         cancel-text="取消"
+        @ok="handleDeleteNode(nodeData!.id, nodeData!.type)"
       >
         <a-button size="small" status="danger">
           <template #icon>
@@ -124,6 +125,19 @@ function closeDrawer() {
 function handleConfirm() {
   props.lf!.setProperties(nodeData.value!.id, nodeData.value!.properties!)
   closeDrawer()
+}
+
+function handleDeleteNode(nodeId: string, nodeType: string, deepth = 0) {
+  if (nodeType !== 'operation-node') {
+    for (const childNode of props.lf!.getNodeOutgoingNode(nodeId)) {
+      handleDeleteNode(childNode.id, childNode.type, deepth + 1)
+    }
+  }
+  props.lf!.deleteNode(nodeId);
+  if (deepth === 0) {
+    closeDrawer()
+    props.lf!.emit('custom:layout', {});
+  }
 }
 </script>
 

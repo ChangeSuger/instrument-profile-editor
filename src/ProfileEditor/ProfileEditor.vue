@@ -47,7 +47,7 @@ onMounted(() => {
     stopZoomGraph: false,
     grid: false,
     adjustEdge: false,
-    // adjustNodePosition: false,
+    adjustNodePosition: false,
     nodeTextEdit: false,
     edgeTextEdit: false,
     textEdit: false,
