@@ -112,10 +112,6 @@ onMounted(() => {
     nodeEditDrawerRef.value?.openDrawer(data);
   });
 
-  lf.value.on('node:click', ({data}) => {
-    console.log(data);
-  })
-
   lf.value.on('blank:click', () => {
     nodeEditDrawerRef.value?.closeDrawer();
   });
