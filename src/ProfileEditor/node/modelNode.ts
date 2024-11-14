@@ -11,6 +11,7 @@ class ModelNodeView extends HtmlNode {
     properties: object;
     isSelected: boolean;
     isHovered: boolean;
+    isFloded: boolean;
     model: HtmlNodeModel;
   }>> | null = null;
 
@@ -24,7 +25,7 @@ class ModelNodeView extends HtmlNode {
 
   shouldUpdate() {
     const data = {
-      ...this.props.model.properties,
+      id: this.props.model.properties.id,
       isFloded: this.props.model.properties.isFloded,
       isSelected: this.props.model.isSelected,
       isHovered: this.props.model.isHovered
@@ -43,6 +44,7 @@ class ModelNodeView extends HtmlNode {
         properties: this.props.model.properties,
         isSelected: this.props.model.isSelected,
         isHovered: this.props.model.isHovered,
+        isFloded: this.props.model.properties.isFloded as boolean,
         model: this.props.model
       }
     } else {
@@ -51,6 +53,7 @@ class ModelNodeView extends HtmlNode {
         properties: this.props.model.properties,
         isSelected: this.props.model.isSelected,
         isHovered: this.props.model.isHovered,
+        isFloded: this.props.model.properties.isFloded,
         model: this.props.model,
       });
       this.vm = createApp({

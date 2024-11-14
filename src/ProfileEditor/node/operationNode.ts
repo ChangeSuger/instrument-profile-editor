@@ -25,7 +25,7 @@ class OperationNodeView extends HtmlNode {
 
   shouldUpdate() {
     const data = {
-      ...this.props.model.properties,
+      id: this.props.model.properties.id,
       isSelected: this.props.model.isSelected,
       isHovered: this.props.model.isHovered
     }

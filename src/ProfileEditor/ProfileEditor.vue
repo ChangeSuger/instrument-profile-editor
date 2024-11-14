@@ -57,7 +57,7 @@ onMounted(() => {
 
   lf.value.on('custom:layout', () => {
     let height = 100
-    const deltaY = 60
+    const deltaY = 50
     const graphData = lf.value!.getGraphRawData()
     let startNode: LogicFlow.NodeData = graphData.nodes[0]
     const nodeMap = new Map<string, LogicFlow.NodeData[]>()

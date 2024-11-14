@@ -43,10 +43,10 @@ const props = defineProps({
   },
   isSelected: Boolean,
   isHovered: Boolean,
+  isFloded: Boolean,
 })
 
 const isActive = computed(() => props.isHovered || props.isSelected)
-const isFloded = computed(() => props.model.properties.isFloded)
 const hasChild = ref(false);
 
 function addNode() {

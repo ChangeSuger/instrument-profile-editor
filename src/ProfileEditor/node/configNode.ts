@@ -11,6 +11,7 @@ class ConfigNodeView extends HtmlNode {
     properties: object;
     isSelected: boolean;
     isHovered: boolean;
+    isFloded: boolean;
     model: HtmlNodeModel;
   }>> | null = null;
 
@@ -43,6 +44,7 @@ class ConfigNodeView extends HtmlNode {
         properties: this.props.model.properties,
         isSelected: this.props.model.isSelected,
         isHovered: this.props.model.isHovered,
+        isFloded: this.props.model.properties.isFloded as boolean,
         model: this.props.model
       }
     } else {
@@ -51,6 +53,7 @@ class ConfigNodeView extends HtmlNode {
         properties: this.props.model.properties,
         isSelected: this.props.model.isSelected,
         isHovered: this.props.model.isHovered,
+        isFloded: this.props.model.properties.isFloded,
         model: this.props.model,
       });
       this.vm = createApp({

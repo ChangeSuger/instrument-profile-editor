@@ -44,10 +44,10 @@ const props = defineProps({
   },
   isSelected: Boolean,
   isHovered: Boolean,
+  isFloded: Boolean,
 })
 
 const isActive = computed(() => props.isHovered || props.isSelected)
-const isFloded = computed(() => props.model.properties.isFloded)
 const hasChild = ref(false);
 
 function addNode() {
@@ -211,7 +211,7 @@ onBeforeUnmount(() => {
         left: -5px;
         width: 40px;
         height: 0px;
-        border: 2px solid #000000; 
+        border: 2px solid #000000;
       }
     }
 
