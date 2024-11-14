@@ -6,10 +6,11 @@
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    stroke-width="2"
+    stroke-width="3"
     stroke-linecap="round"
     stroke-linejoin="round"
   >
-    <path d="m15 18-6-6 6-6"/>
+  <circle cx="12" cy="12" r="10" stroke-width="0"/>
+    <path d="m14 18-6-6 6-6"/>
   </svg>
 </template>

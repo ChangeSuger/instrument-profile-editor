@@ -25,6 +25,7 @@ class ConfigNodeView extends HtmlNode {
   shouldUpdate() {
     const data = {
       id: this.props.model.properties.id,
+      isFloded: this.props.model.properties.isFloded,
       isSelected: this.props.model.isSelected,
       isHovered: this.props.model.isHovered,
     }

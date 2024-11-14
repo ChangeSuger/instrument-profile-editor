@@ -15,6 +15,7 @@ import NodeEditDrawer from './components/drawer/NodeEditDrawer.vue';
 import { ref, onMounted } from 'vue';
 import LogicFlow from '@logicflow/core';
 import '@logicflow/core/lib/style/index.css';
+import { v4 as uuidv4 } from 'uuid';
 
 import { InstrumentNode, ModelNode, ConfigNode, OperationNode } from './node';
 
@@ -23,10 +24,10 @@ import { NodeType, POSITION_X } from './common';
 const lf = ref<LogicFlow>()
 const nodeEditDrawerRef = ref<InstanceType<typeof NodeEditDrawer>>();
 
-const data = {
+const dataInit = {
   nodes: [
     {
-      id: '11',
+      id: uuidv4(),
       type: 'instrument-node',
       x: 100,
       y: 100,
@@ -82,11 +83,19 @@ onMounted(() => {
         }
         lf.value!.graphModel.moveNode2Coordinate(node.id, POSITION_X['model-node'], height)
 
+        if (node.properties?.isFloded) {
+          return;
+        }
+
         nodeMap.get(node.id)?.forEach((node, index) => {
           if (index > 0) {
             height += deltaY
           }
           lf.value!.graphModel.moveNode2Coordinate(node.id, POSITION_X['config-node'], height)
+
+          if (node.properties?.isFloded) {
+            return;
+          }
 
           nodeMap.get(node.id)?.forEach((node, index) => {
             if (index > 0) {
@@ -103,11 +112,15 @@ onMounted(() => {
     nodeEditDrawerRef.value?.openDrawer(data);
   });
 
+  lf.value.on('node:click', ({data}) => {
+    console.log(data);
+  })
+
   lf.value.on('blank:click', () => {
     nodeEditDrawerRef.value?.closeDrawer();
   });
 
-  lf.value.render(data);
+  lf.value.render(dataInit);
 });
 </script>
 

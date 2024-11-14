@@ -1,20 +1,24 @@
 import type { InstrumentNodeData, ModelNodeData, ConfigNodeData, OperationNodeData } from "../types";
 
+type FlodedData = { isFloded: boolean };
+
 export function initInstrumentNodeData(): InstrumentNodeData {
   return {
     id: '',
   };
 }
 
-export function initModelNodeData(): ModelNodeData {
+export function initModelNodeData(): ModelNodeData & FlodedData {
   return {
+    isFloded: false,
     id: '',
     configType: 'NI-VISA',
   }
 }
 
-export function initConfigNodeData(): ConfigNodeData {
+export function initConfigNodeData(): ConfigNodeData & FlodedData {
   return {
+    isFloded: false,
     id: 'NI-VISA',
     spaceName: '',
     className: '',

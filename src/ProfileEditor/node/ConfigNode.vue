@@ -8,8 +8,17 @@
         {{ properties.id }}
       </TypographyParagraph>
     </div>
-    <div class="node-next" :class="{ hidden: !isActive }">
-      <CirclePlus class="add-node-icon" @click.stop="addNode" />
+    <div class="node-next" :class="{ hidden: !isActive && !isFloded }">
+      <template v-if="isFloded">
+        <div class="vertical-line">
+          <div class="line"></div>
+        </div>
+        <ArrowLeft class="unflod-node-icon" @click.stop="unflodNode" />
+      </template>
+      <template v-else>
+        <CirclePlus class="add-node-icon" @click.stop="addNode" />
+        <ArrowLeft v-if="hasChild" class="flod-node-icon" @click.stop="flodNode" />
+      </template>
     </div>
   </div>
 </template>
@@ -17,9 +26,10 @@
 <script setup lang="ts">
 import { TypographyParagraph } from '@arco-design/web-vue'
 import { HtmlNodeModel } from '@logicflow/core'
-import { computed } from 'vue'
+import { computed, onMounted, onBeforeUnmount, ref } from 'vue'
 import CirclePlus from '../icons/CirclePlus.vue'
-import { NodeType, OPERATION_NODE_TYPE_MAP } from '../common'
+import ArrowLeft from '../icons/ArrowLeft.vue'
+import { OPERATION_NODE_TYPE_MAP } from '../common'
 import { initOperationNodeData } from '../utils/inital'
 import type { ConfigType } from '../types'
 
@@ -37,6 +47,8 @@ const props = defineProps({
 })
 
 const isActive = computed(() => props.isHovered || props.isSelected)
+const isFloded = computed(() => props.model.properties.isFloded)
+const hasChild = ref(false);
 
 function addNode() {
   const nodeId = props.model.id
@@ -59,6 +71,54 @@ function addNode() {
   })
   graphModel.eventCenter.emit('custom:layout', {})
 }
+
+function flodNode() {
+  props.model.setProperty('isFloded', true);
+  const nodeId = props.model.id
+  const graphModel = props.model.graphModel
+  const nodes = graphModel.getNodeOutgoingNode(nodeId)
+  const edges = graphModel.getNodeOutgoingEdge(nodeId)
+  for (const node of nodes) {
+    node.visible = false;
+  }
+  for (const edge of edges) {
+    edge.visible = false;
+  }
+  graphModel.eventCenter.emit('custom:layout', {})
+}
+
+function unflodNode() {
+  props.model.setProperty('isFloded', false);
+  const nodeId = props.model.id
+  const graphModel = props.model.graphModel
+  const nodes = graphModel.getNodeOutgoingNode(nodeId)
+  const edges = graphModel.getNodeOutgoingEdge(nodeId)
+  for (const node of nodes) {
+    node.visible = true;
+  }
+  for (const edge of edges) {
+    edge.visible = true;
+  }
+  graphModel.eventCenter.emit('custom:layout', {})
+}
+
+function updateHasChild() {
+  const graphModel = props.model.graphModel;
+  const nodeId = props.model.id;
+  const childs = graphModel.getNodeOutgoingNode(nodeId);
+  hasChild.value = childs.length > 0;
+}
+
+onMounted(() => {
+  updateHasChild();
+  props.model.graphModel.eventCenter.on('edge:add', updateHasChild)
+  props.model.graphModel.eventCenter.on('node:delete', updateHasChild)
+})
+
+onBeforeUnmount(() => {
+  props.model.graphModel.eventCenter.off('edge:add', updateHasChild)
+  props.model.graphModel.eventCenter.off('node:delete', updateHasChild)
+})
 </script>
 
 <style scoped lang="scss">
@@ -118,11 +178,49 @@ function addNode() {
       display: none;
     }
 
+    .flod-node-icon {
+      width: 30px;
+      height: 30px;
+      fill: rgb(146, 198, 146);
+      stroke: white;
+
+      &:hover {
+        fill: rgb(27, 130, 27);
+      }
+    }
+
     .add-node-icon {
       width: 30px;
       height: 30px;
       fill: rgb(146, 198, 146);
       stroke: white;
+
+      &:hover {
+        fill: rgb(27, 130, 27);
+      }
+    }
+
+    .vertical-line {
+      width: 30px;
+      height: 30px;
+      position: relative;
+
+      .line {
+        position: absolute;
+        top: 13px;
+        left: -5px;
+        width: 40px;
+        height: 0px;
+        border: 2px solid #000000; 
+      }
+    }
+
+    .unflod-node-icon {
+      width: 30px;
+      height: 30px;
+      fill: rgb(146, 198, 146);
+      stroke: white;
+      transform: rotate(180deg);
 
       &:hover {
         fill: rgb(27, 130, 27);

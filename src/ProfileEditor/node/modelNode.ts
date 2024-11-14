@@ -25,6 +25,7 @@ class ModelNodeView extends HtmlNode {
   shouldUpdate() {
     const data = {
       ...this.props.model.properties,
+      isFloded: this.props.model.properties.isFloded,
       isSelected: this.props.model.isSelected,
       isHovered: this.props.model.isHovered
     }
