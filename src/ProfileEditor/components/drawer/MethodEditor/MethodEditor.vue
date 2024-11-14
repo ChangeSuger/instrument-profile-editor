@@ -4,7 +4,11 @@
     <a-collapse v-if="methods.length">
       <a-collapse-item v-for="(method, index) in methods" :key="index">
         <template #header>
-          <a-input :style="{ width: '200px' }" v-model="method.name" allow-clear @click.stop />
+          <a-input :style="{ width: '200px' }" v-model="method.name" allow-clear @click.stop>
+            <template #prepend>
+              方法名
+            </template>
+          </a-input>
         </template>
         <template #extra>
           <a-button-group type="text" size="mini">
@@ -91,7 +95,6 @@ function moveDownMethod(index: number) {
 function removeMethod(index: number) {
   props.methods.splice(index, 1);
 }
-
 </script>
 
 <style scoped lang="scss">

@@ -1,7 +1,7 @@
 <template>
   <div class="node-editor-drawer" :class="{ hidden: !visible }">
     <div class="node-editor-drawer-header">
-      <span class="node-editor-drawer-title">节点编辑</span>
+      <span class="node-editor-drawer-title">{{ drawerTitle }}</span>
       <a-popconfirm
         v-if="nodeType !== NodeType.Instrument"
         type="warning"
@@ -92,6 +92,23 @@ const nodeData = ref<LogicFlow.NodeData>()
 const nodeType = computed(() => {
   return nodeData.value?.properties?.type
 })
+
+const drawerTitle = computed(() => {
+  if (nodeType.value === NodeType.Instrument) {
+    return '设备节点编辑'
+  } else if (nodeType.value === NodeType.Model) {
+    return '型号节点编辑'
+  } else if (nodeType.value === NodeType.Config) {
+    return '配置节点编辑'
+  } else if (nodeType.value === NodeType.NI_VISA_OPERATION) {
+    return '操作节点编辑'
+  } else if (nodeType.value === NodeType.FUNCTION_OPERATION) {
+    return '操作节点编辑'
+  } else if (nodeType.value === NodeType.CUSTOM_OPERATION) {
+    return '操作节点编辑'
+  }
+  return '节点编辑'
+});
 
 const visible = ref(false)
 

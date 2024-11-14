@@ -17,9 +17,9 @@
           </a-button-group>
         </template>
         <a-space>
-          <a-input v-model="parameter.value" allow-clear>
+          <a-input v-model="parameter.value" allow-clear size="mini">
             <template #prepend>
-              <a-select :style="{ width: '110px' }" v-model="parameter.type">
+              <a-select :style="{ width: '100px' }" v-model="parameter.type" size="mini">
                 <a-option value="System.Boolean">Boolean</a-option>
                 <a-option value="System.Char">Char</a-option>
                 <a-option value="System.Double">Double</a-option>
