@@ -67,6 +67,10 @@ function addNode() {
     sourceNodeId: nodeId,
     targetNodeId: newNode.id,
   })
+  graphModel.clearSelectElements();
+  newNode.setSelected(true);
+  // @ts-expect-error 外部手动触发事件，没必要遵守类型
+  graphModel.eventCenter.emit('node:click', { data: newNode.getData() })
   graphModel.eventCenter.emit('custom:layout', {})
 }
 

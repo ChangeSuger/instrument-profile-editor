@@ -69,6 +69,12 @@ function addNode() {
     sourceNodeId: nodeId,
     targetNodeId: newNode.id,
   })
+  // 选中新增的节点
+  graphModel.clearSelectElements();
+  newNode.setSelected(true);
+  // @ts-expect-error 外部手动触发事件，没必要遵守类型
+  graphModel.eventCenter.emit('node:click', { data: newNode.getData() })
+  // 更新布局
   graphModel.eventCenter.emit('custom:layout', {})
 }
 

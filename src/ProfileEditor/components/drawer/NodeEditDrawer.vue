@@ -4,6 +4,7 @@
       <span class="node-editor-drawer-title">{{ drawerTitle }}</span>
       <a-popconfirm
         v-if="nodeType !== NodeType.Instrument"
+        position="left"
         type="warning"
         content="确定删除该节点？"
         ok-text="删除"
