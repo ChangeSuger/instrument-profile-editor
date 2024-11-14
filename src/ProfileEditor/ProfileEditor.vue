@@ -1,7 +1,7 @@
 <template>
   <div id="profile-editor">
     <div class="control-panel">
-      <ControlPanel />
+      <ControlPanel :lf="lf" />
     </div>
     <div id="lf-container"></div>
     <NodeEditDrawer :lf="lf" ref="nodeEditDrawerRef" />
@@ -47,7 +47,7 @@ onMounted(() => {
     stopZoomGraph: false,
     grid: false,
     adjustEdge: false,
-    adjustNodePosition: false,
+    // adjustNodePosition: false,
     nodeTextEdit: false,
     edgeTextEdit: false,
     textEdit: false,

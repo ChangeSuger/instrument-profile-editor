@@ -137,6 +137,8 @@ function handleConfirm() {
   display: flex;
   flex-direction: column;
   border: 2px solid #d3d3d3;
+  background-color: #fffefe;
+  z-index: 10;
 
   .node-editor-drawer-header {
     height: 50px;

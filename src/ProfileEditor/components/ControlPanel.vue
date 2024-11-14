@@ -6,12 +6,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import { Message } from '@arco-design/web-vue'
 import xml2js from 'xml2js'
-import { xmlData2ProfileData, profileData2XmlData } from '../utils/adaptor'
+import { xmlData2ProfileData, profileData2XmlData, adaptorIn, adaptorOut } from '../utils/adaptor'
+import LogicFlow from '@logicflow/core'
 
-const xmlData = ref()
+const props = defineProps({
+  lf: LogicFlow,
+})
 
 function handleImport() {
   const input = document.createElement('input')
@@ -29,9 +31,8 @@ function handleImport() {
           Message.error('配置文件解析失败')
           return
         } else {
-          xmlData.value = result
-          console.log(result)
-          console.log(xmlData2ProfileData(result))
+          props.lf?.render(adaptorIn(xmlData2ProfileData(result)));
+          props.lf?.emit('custom:layout', {});
         }
       })
     }
@@ -42,7 +43,7 @@ function handleImport() {
 
 function handleExport() {
   const builder = new xml2js.Builder()
-  const xml = builder.buildObject(profileData2XmlData(xmlData2ProfileData(xmlData.value)))
+  const xml = builder.buildObject(profileData2XmlData((adaptorOut(props.lf!.getGraphRawData()))))
   const blob = new Blob([xml], { type: 'text/xml' })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')

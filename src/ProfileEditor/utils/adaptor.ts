@@ -6,7 +6,10 @@ import type {
   XMLConfigDataMap,
   XMLCommunicationConfigDataMap,
 } from "../types";
-// import type LogicFlow from "@logicflow/core";
+import { v4 as uuidv4 } from 'uuid';
+import type LogicFlow from "@logicflow/core";
+import { NodeType, NODE_WIDTH_HALF } from "../common";
+import { initConfigNodeData, initOperationNodeData } from "./inital";
 
 /**
  * 将 xml2js 解析 xml 得到的数据适配为配置文件数据
@@ -290,13 +293,268 @@ export function profileData2XmlData(profileData: ProfileData): XMLProfileData {
 /**
  * 将配置文件数据适配为流程图数据
  */
-// export function adaptorIn(profileData: ProfileData): LogicFlow.GraphData {
+export function adaptorIn(profileData: ProfileData): LogicFlow.GraphData {
+  const graphData: LogicFlow.GraphData = {
+    nodes: [],
+    edges: [],
+  };
 
-// }
+  const instrumentNode = {
+    id: uuidv4(),
+    type: 'instrument-node',
+    x: 0,
+    y: 0,
+    properties: {
+      type: NodeType.Instrument,
+      id: profileData.id,
+    }
+  }
+
+  graphData.nodes.push(instrumentNode);
+
+  for (const modelData of profileData.models) {
+    const modelNode = {
+      id: uuidv4(),
+      type: 'model-node',
+      x: 0,
+      y: 0,
+      properties: {
+        type: NodeType.Model,
+        parentId: instrumentNode.id,
+        id: modelData.id,
+        configType: modelData.configType,
+      }
+    }
+
+    graphData.nodes.push(modelNode);
+    graphData.edges.push(initEdgeData(instrumentNode.id, modelNode.id));
+
+    if (modelData['NI-VISA']) {
+      const configNode = {
+        id: uuidv4(),
+        type: 'config-node',
+        x: 0,
+        y: 0,
+        properties: {
+          type: NodeType.Config,
+          parentId: modelNode.id,
+          ...initConfigNodeData(),
+          id: modelData['NI-VISA'].id,
+        }
+      };
+
+      graphData.nodes.push(configNode);
+      graphData.edges.push(initEdgeData(modelNode.id, configNode.id));
+
+      for (const operationData of modelData['NI-VISA'].operations) {
+        const operationNode = {
+          id: uuidv4(),
+          type: 'operation-node',
+          x: 0,
+          y: 0,
+          properties: {
+            type: NodeType.NI_VISA_OPERATION,
+            parentId: configNode.id,
+            ...initOperationNodeData(),
+            id: operationData.id,
+            parameter: operationData.parameter,
+            hasReturn: operationData.hasReturn,
+            command: operationData.command,
+          }
+        }
+
+        graphData.nodes.push(operationNode);
+        graphData.edges.push(initEdgeData(configNode.id, operationNode.id));
+      }
+    }
+
+    if (modelData['FUNCTION']) {
+      const configNode = {
+        id: uuidv4(),
+        type: 'config-node',
+        x: 0,
+        y: 0,
+        properties: {
+          type: NodeType.Config,
+          parentId: modelNode.id,
+          ...initConfigNodeData(),
+          id: modelData.FUNCTION.id,
+          spaceName: modelData.FUNCTION.spaceName,
+          className: modelData.FUNCTION.className,
+          dllTemplate: modelData.FUNCTION.dllTemplate,
+          isVisa: modelData.FUNCTION.isVisa,
+        }
+      }
+
+      graphData.nodes.push(configNode);
+      graphData.edges.push(initEdgeData(modelNode.id, configNode.id));
+
+      for (const operationData of modelData.FUNCTION.operations) {
+        const operationNode = {
+          id: uuidv4(),
+          type: 'operation-node',
+          x: 0,
+          y: 0,
+          properties: {
+            type: NodeType.FUNCTION_OPERATION,
+            parentId: configNode.id,
+            ...initOperationNodeData(),
+            id: operationData.id,
+            parameter: operationData.parameter,
+            hasReturn: operationData.hasReturn,
+            methods: operationData.methods,
+          }
+        }
+
+        graphData.nodes.push(operationNode);
+        graphData.edges.push(initEdgeData(configNode.id, operationNode.id));
+      }
+    }
+
+    if (modelData['CUSTOM']) {
+      const configNode = {
+        id: uuidv4(),
+        type: 'config-node',
+        x: 0,
+        y: 0,
+        properties: {
+          type: NodeType.Config,
+          parentId: modelNode.id,
+          ...initConfigNodeData(),
+          id: modelData.CUSTOM.id,
+          communicationType: modelData.CUSTOM.communicationType,
+          communicationConfig: modelData.CUSTOM.communicationConfig,
+        }
+      }
+
+      graphData.nodes.push(configNode);
+      graphData.edges.push(initEdgeData(modelNode.id, configNode.id));
+
+      for (const operationData of modelData.CUSTOM.operations) {
+        const operationNode = {
+          id: uuidv4(),
+          type: 'operation-node',
+          x: 0,
+          y: 0,
+          properties: {
+            type: NodeType.CUSTOM_OPERATION,
+            parentId: configNode.id,
+            ...initOperationNodeData(),
+            id: operationData.id,
+            measureModes: operationData.measureModes,
+          }
+        }
+
+        graphData.nodes.push(operationNode);
+        graphData.edges.push(initEdgeData(configNode.id, operationNode.id));
+      }
+    }
+  }
+
+  return graphData;
+}
+
+function initEdgeData(sourceNodeId: string, targetNodeId: string): LogicFlow.EdgeData {
+  return {
+    id: uuidv4(),
+    type: 'polyline',
+    sourceNodeId,
+    targetNodeId,
+    startPoint: { x: NODE_WIDTH_HALF, y: 0 },
+    endPoint: { x: -NODE_WIDTH_HALF, y: 0 },
+  }
+}
 
 /**
  * 将流程图数据适配为配置文件数据
  */
-// export function adaptorOut(graphData: LogicFlow.GraphData): ProfileData {
+export function adaptorOut(graphData: LogicFlow.GraphData): ProfileData {
+  const nodeMap = new Map<string, LogicFlow.NodeData[]>()
+  let startNode = graphData.nodes[0];
+  graphData.nodes.forEach((node) => {
+    const parentId = node.properties!.parentId
+    if (parentId) {
+      if (nodeMap.has(parentId)) {
+        nodeMap.get(parentId)!.push(node)
+      } else {
+        nodeMap.set(parentId, [node])
+      }
+    }
+    if (node.type === 'instrument-node') {
+      startNode = node
+    }
+  });
 
-// }
+  const profileData: ProfileData = {
+    id: startNode.properties!.id,
+    models: [],
+  }
+
+  nodeMap.get(startNode.id)?.forEach(modelNode => {
+    const modelData: ModelData = {
+      id: modelNode.properties!.id,
+      configType: modelNode.properties!.configType,
+    }
+
+    nodeMap.get(modelNode.id)?.forEach(configNode => {
+      if (configNode.properties!.id === 'NI-VISA' && !modelData['NI-VISA']) {
+        const configData: ModelData['NI-VISA'] = {
+          id: 'NI-VISA',
+          operations: [],
+        }
+
+        nodeMap.get(configNode.id)?.forEach(operationNode => {
+          configData.operations.push({
+            id: operationNode.properties!.id,
+            parameter: operationNode.properties!.parameter,
+            hasReturn: operationNode.properties!.hasReturn,
+            command: operationNode.properties!.command,
+          });
+        })
+
+        modelData['NI-VISA'] = configData;
+      } else if (configNode.properties!.id === 'FUNCTION' && !modelData.FUNCTION) {
+        const configData: ModelData['FUNCTION'] = {
+          id: 'FUNCTION',
+          spaceName: configNode.properties!.spaceName,
+          className: configNode.properties!.className,
+          dllTemplate: configNode.properties!.dllTemplate,
+          isVisa: configNode.properties!.isVisa,
+          operations: [],
+        }
+
+        nodeMap.get(configNode.id)?.forEach(operationNode => {
+          configData.operations.push({
+            id: operationNode.properties!.id,
+            parameter: operationNode.properties!.parameter,
+            hasReturn: operationNode.properties!.hasReturn,
+            methods: operationNode.properties!.methods,
+          });
+        });
+
+        modelData.FUNCTION = configData;
+      } else if (configNode.properties!.id === 'CUSTOM' && !modelData.CUSTOM) {
+        const configData: ModelData['CUSTOM'] = {
+          id: 'CUSTOM',
+          communicationType: configNode.properties!.communicationType,
+          communicationConfig: configNode.properties!.communicationConfig,
+          operations: [],
+        };
+
+        nodeMap.get(configNode.id)?.forEach(operationNode => {
+          const operationData = {
+            id: operationNode.properties!.id,
+            measureModes: operationNode.properties!.measureModes,
+          }
+          configData.operations.push(operationData);
+        });
+
+        modelData.CUSTOM = configData;
+      }
+    })
+
+    profileData.models.push(modelData);
+  });
+
+  return profileData;
+}
