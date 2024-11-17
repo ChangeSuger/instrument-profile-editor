@@ -24,37 +24,37 @@
     <div class="node-editor-drawer-body">
       <InstrumentNodeForm
         v-if="nodeType === NodeType.Instrument"
-        v-model:formData="(nodeData!.properties as InstrumentNodeData)"
+        :formData="(nodeData!.properties as InstrumentNodeData)"
         ref="instrumentNodeFormRef"
       />
 
       <ModelNodeForm
         v-else-if="nodeType === NodeType.Model"
-        v-model:formData="(nodeData!.properties as ModelNodeData)"
+        :formData="(nodeData!.properties as ModelNodeData)"
         ref="modelNodeFormRef"
       />
 
       <ConfigNodeForm
         v-else-if="nodeType === NodeType.Config"
-        v-model:formData="(nodeData!.properties as ConfigNodeData)"
+        :formData="(nodeData!.properties as ConfigNodeData)"
         ref="configNodeFormRef"
       />
 
       <NiVisaOperationNodeForm
         v-else-if="nodeType === NodeType.NI_VISA_OPERATION"
-        v-model:formData="(nodeData!.properties as OperationNodeData)"
+        :formData="(nodeData!.properties as OperationNodeData)"
         ref="niVisaOperationNodeFormRef"
       />
 
       <FunctionOperationNodeForm
         v-else-if="nodeType === NodeType.FUNCTION_OPERATION"
-        v-model:formData="(nodeData!.properties as OperationNodeData)"
+        :formData="(nodeData!.properties as OperationNodeData)"
         ref="functionOperationNodeFormRef"
       />
 
       <CustomOperationNodeForm
         v-else-if="nodeType === NodeType.CUSTOM_OPERATION"
-        v-model:formData="(nodeData!.properties as OperationNodeData)"
+        :formData="(nodeData!.properties as OperationNodeData)"
         ref="customOperationNodeFormRef"
       />
     </div>
