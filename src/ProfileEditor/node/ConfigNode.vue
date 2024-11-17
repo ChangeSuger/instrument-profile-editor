@@ -13,18 +13,24 @@
         <div class="vertical-line">
           <div class="line"></div>
         </div>
-        <ArrowLeft class="unflod-node-icon" @click.stop="unflodNode" />
+        <Tooltip content="展开">
+          <ArrowLeft class="unflod-node-icon" @click.stop="unflodNode" />
+        </Tooltip>
       </template>
       <template v-else>
-        <CirclePlus class="add-node-icon" @click.stop="addNode" />
-        <ArrowLeft v-if="hasChild" class="flod-node-icon" @click.stop="flodNode" />
+        <Tooltip content="添加操作节点">
+          <CirclePlus class="add-node-icon" @click.stop="addNode" />
+        </Tooltip>
+        <Tooltip content="折叠">
+          <ArrowLeft v-if="hasChild" class="flod-node-icon" @click.stop="flodNode" />
+        </Tooltip>
       </template>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { TypographyParagraph } from '@arco-design/web-vue'
+import { TypographyParagraph, Tooltip } from '@arco-design/web-vue'
 import { HtmlNodeModel } from '@logicflow/core'
 import { computed, onMounted, onBeforeUnmount, ref } from 'vue'
 import CirclePlus from '../icons/CirclePlus.vue'

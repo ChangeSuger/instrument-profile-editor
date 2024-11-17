@@ -9,13 +9,15 @@
       </TypographyParagraph>
     </div>
     <div class="node-next" :class="{ hidden: !isActive }">
-      <CirclePlus class="add-node-icon" @click.stop="addNode" />
+      <Tooltip content="添加型号节点">
+        <CirclePlus class="add-node-icon" @click.stop="addNode" />
+      </Tooltip>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { TypographyParagraph } from '@arco-design/web-vue'
+import { TypographyParagraph, Tooltip } from '@arco-design/web-vue'
 import { HtmlNodeModel } from '@logicflow/core'
 import { computed } from 'vue'
 import CirclePlus from '../icons/CirclePlus.vue'
