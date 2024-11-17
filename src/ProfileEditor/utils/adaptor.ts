@@ -24,7 +24,7 @@ export function xmlData2ProfileData(xmlProfileData: XMLProfileData): ProfileData
     const modelData: ModelData = {
       id: xmlModelData.$.id,
       configType: xmlModelData['配置方式'][0],
-    }
+    };
     for (const xmlConfigData of xmlModelData['配置'] ?? []) {
       if (xmlConfigData.$.id === 'NI-VISA') {
         const configData: ModelData['NI-VISA'] = {
@@ -35,9 +35,9 @@ export function xmlData2ProfileData(xmlProfileData: XMLProfileData): ProfileData
               parameter: xmlOperationData.$.Parameter,
               hasReturn: xmlOperationData.$.HasReturn,
               command: xmlOperationData['指令'][0],
-            }
+            };
           }) || [],
-        }
+        };
         if (!modelData['NI-VISA']) {
           modelData['NI-VISA'] = configData;
         }
@@ -62,11 +62,11 @@ export function xmlData2ProfileData(xmlProfileData: XMLProfileData): ProfileData
                     return {
                       type: xmlParameterData.$.Type,
                       value: xmlParameterData.$.Value,
-                    }
+                    };
                   }) || [],
-                }
+                };
               }) || [],
-            }
+            };
           }) || [],
         };
         if (!modelData.FUNCTION) {
@@ -104,15 +104,15 @@ export function xmlData2ProfileData(xmlProfileData: XMLProfileData): ProfileData
                           return {
                             send: xmlByteStreamData.$.send,
                             receive: xmlByteStreamData.$.receive,
-                          }
+                          };
                         }) || [],
-                      }
+                      };
                     }) || [],
-                  }
+                  };
                 }) || [],
-              }
+              };
             }) || [],
-          }
+          };
           if (!modelData.CUSTOM) {
             modelData.CUSTOM = configData;
           }
@@ -146,15 +146,15 @@ export function xmlData2ProfileData(xmlProfileData: XMLProfileData): ProfileData
                           return {
                             send: xmlByteStreamData.$.send,
                             receive: xmlByteStreamData.$.receive,
-                          }
+                          };
                         }) || [],
-                      }
+                      };
                     }) || [],
-                  }
+                  };
                 }) || [],
-              }
+              };
             }) || [],
-          }
+          };
           if (!modelData.CUSTOM) {
             modelData.CUSTOM = configData;
           }
@@ -177,14 +177,14 @@ export function profileData2XmlData(profileData: ProfileData): XMLProfileData {
       $: { id: profileData.id },
       '型号': [],
     }
-  }
+  };
 
   for (const modelData of profileData.models ?? []) {
     const xmlModelData: XMLModelData = {
       $: { id: modelData.id },
       '配置方式': [modelData.configType],
       '配置': [],
-    }
+    };
     if (modelData['NI-VISA']) {
       const xmlConfigData: XMLConfigDataMap['NI-VISA'] = {
         $: { id: 'NI-VISA' },
@@ -196,9 +196,9 @@ export function profileData2XmlData(profileData: ProfileData): XMLProfileData {
               HasReturn: operationData.hasReturn,
             },
             '指令': [operationData.command],
-          }
+          };
         }),
-      }
+      };
       xmlModelData['配置'].push(xmlConfigData);
     }
     if (modelData.FUNCTION) {
@@ -226,13 +226,13 @@ export function profileData2XmlData(profileData: ProfileData): XMLProfileData {
                       Type: parameterData.type,
                       Value: parameterData.value,
                     }
-                  }
+                  };
                 }),
-              }
+              };
             }),
-          }
+          };
         }),
-      }
+      };
       xmlModelData['配置'].push(xmlConfigData);
     }
     if (modelData.CUSTOM) {
@@ -273,15 +273,15 @@ export function profileData2XmlData(profileData: ProfileData): XMLProfileData {
                           send: byteStreamData.send,
                           receive: byteStreamData.receive,
                         }
-                      }
+                      };
                     }),
-                  }
+                  };
                 }),
-              }
+              };
             }),
-          }
+          };
         }),
-      }
+      };
       xmlModelData['配置'].push(xmlConfigData);
     }
     xmlProfileData['设备类别']['型号'].push(xmlModelData);
@@ -308,7 +308,7 @@ export function adaptorIn(profileData: ProfileData): LogicFlow.GraphData {
       type: NodeType.Instrument,
       id: profileData.id,
     }
-  }
+  };
 
   graphData.nodes.push(instrumentNode);
 
@@ -324,7 +324,7 @@ export function adaptorIn(profileData: ProfileData): LogicFlow.GraphData {
         id: modelData.id,
         configType: modelData.configType,
       }
-    }
+    };
 
     graphData.nodes.push(modelNode);
     graphData.edges.push(initEdgeData(instrumentNode.id, modelNode.id));
@@ -361,7 +361,7 @@ export function adaptorIn(profileData: ProfileData): LogicFlow.GraphData {
             hasReturn: operationData.hasReturn,
             command: operationData.command,
           }
-        }
+        };
 
         graphData.nodes.push(operationNode);
         graphData.edges.push(initEdgeData(configNode.id, operationNode.id));
@@ -384,7 +384,7 @@ export function adaptorIn(profileData: ProfileData): LogicFlow.GraphData {
           dllTemplate: modelData.FUNCTION.dllTemplate,
           isVisa: modelData.FUNCTION.isVisa,
         }
-      }
+      };
 
       graphData.nodes.push(configNode);
       graphData.edges.push(initEdgeData(modelNode.id, configNode.id));
@@ -404,7 +404,7 @@ export function adaptorIn(profileData: ProfileData): LogicFlow.GraphData {
             hasReturn: operationData.hasReturn,
             methods: operationData.methods,
           }
-        }
+        };
 
         graphData.nodes.push(operationNode);
         graphData.edges.push(initEdgeData(configNode.id, operationNode.id));
@@ -425,7 +425,7 @@ export function adaptorIn(profileData: ProfileData): LogicFlow.GraphData {
           communicationType: modelData.CUSTOM.communicationType,
           communicationConfig: modelData.CUSTOM.communicationConfig,
         }
-      }
+      };
 
       graphData.nodes.push(configNode);
       graphData.edges.push(initEdgeData(modelNode.id, configNode.id));
@@ -443,7 +443,7 @@ export function adaptorIn(profileData: ProfileData): LogicFlow.GraphData {
             id: operationData.id,
             measureModes: operationData.measureModes,
           }
-        }
+        };
 
         graphData.nodes.push(operationNode);
         graphData.edges.push(initEdgeData(configNode.id, operationNode.id));
@@ -462,46 +462,46 @@ function initEdgeData(sourceNodeId: string, targetNodeId: string): LogicFlow.Edg
     targetNodeId,
     startPoint: { x: NODE_WIDTH_HALF, y: 0 },
     endPoint: { x: -NODE_WIDTH_HALF, y: 0 },
-  }
+  };
 }
 
 /**
  * 将流程图数据适配为配置文件数据
  */
 export function adaptorOut(graphData: LogicFlow.GraphData): ProfileData {
-  const nodeMap = new Map<string, LogicFlow.NodeData[]>()
+  const nodeMap = new Map<string, LogicFlow.NodeData[]>();
   let startNode = graphData.nodes[0];
   graphData.nodes.forEach((node) => {
-    const parentId = node.properties!.parentId
+    const parentId = node.properties!.parentId;
     if (parentId) {
       if (nodeMap.has(parentId)) {
-        nodeMap.get(parentId)!.push(node)
+        nodeMap.get(parentId)!.push(node);
       } else {
-        nodeMap.set(parentId, [node])
+        nodeMap.set(parentId, [node]);
       }
     }
     if (node.type === 'instrument-node') {
-      startNode = node
+      startNode = node;
     }
   });
 
   const profileData: ProfileData = {
     id: startNode.properties!.id,
     models: [],
-  }
+  };
 
   nodeMap.get(startNode.id)?.forEach(modelNode => {
     const modelData: ModelData = {
       id: modelNode.properties!.id,
       configType: modelNode.properties!.configType,
-    }
+    };
 
     nodeMap.get(modelNode.id)?.forEach(configNode => {
       if (configNode.properties!.id === 'NI-VISA' && !modelData['NI-VISA']) {
         const configData: ModelData['NI-VISA'] = {
           id: 'NI-VISA',
           operations: [],
-        }
+        };
 
         nodeMap.get(configNode.id)?.forEach(operationNode => {
           configData.operations.push({
@@ -510,7 +510,7 @@ export function adaptorOut(graphData: LogicFlow.GraphData): ProfileData {
             hasReturn: operationNode.properties!.hasReturn,
             command: operationNode.properties!.command,
           });
-        })
+        });
 
         modelData['NI-VISA'] = configData;
       } else if (configNode.properties!.id === 'FUNCTION' && !modelData.FUNCTION) {
@@ -521,7 +521,7 @@ export function adaptorOut(graphData: LogicFlow.GraphData): ProfileData {
           dllTemplate: configNode.properties!.dllTemplate,
           isVisa: configNode.properties!.isVisa,
           operations: [],
-        }
+        };
 
         nodeMap.get(configNode.id)?.forEach(operationNode => {
           configData.operations.push({
@@ -545,13 +545,13 @@ export function adaptorOut(graphData: LogicFlow.GraphData): ProfileData {
           const operationData = {
             id: operationNode.properties!.id,
             measureModes: operationNode.properties!.measureModes,
-          }
+          };
           configData.operations.push(operationData);
         });
 
         modelData.CUSTOM = configData;
       }
-    })
+    });
 
     profileData.models.push(modelData);
   });

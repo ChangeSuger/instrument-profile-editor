@@ -16,7 +16,7 @@ class ConfigNodeView extends HtmlNode {
   }>> | null = null;
 
   constructor(props: IHtmlNodeProps) {
-    super(props)
+    super(props);
     this.root = document.createElement('div');
     this.root.style.width = '100%';
     this.root.style.height = '100%';
@@ -29,12 +29,12 @@ class ConfigNodeView extends HtmlNode {
       isFloded: this.props.model.properties.isFloded,
       isSelected: this.props.model.isSelected,
       isHovered: this.props.model.isHovered,
-    }
+    };
     if (this.preProperties && this.preProperties === JSON.stringify(data)) {
       return false;
     }
-    this.preProperties = JSON.stringify(data)
-    return true
+    this.preProperties = JSON.stringify(data);
+    return true;
   }
 
   setHtml(rootEl: SVGForeignObjectElement): void {
@@ -46,7 +46,7 @@ class ConfigNodeView extends HtmlNode {
         isHovered: this.props.model.isHovered,
         isFloded: this.props.model.properties.isFloded as boolean,
         model: this.props.model
-      }
+      };
     } else {
       // @ts-expect-error 暂时不解决
       this.vmProps = ref({
@@ -85,7 +85,7 @@ class ConfigNodeModel extends HtmlNodeModel {
         name: 'right',
         id: `${id}_1`,
       },
-    ]
+    ];
   }
 }
 
@@ -93,4 +93,4 @@ export default {
   type: 'config-node',
   model: ConfigNodeModel,
   view: ConfigNodeView
-}
+};

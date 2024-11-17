@@ -16,7 +16,7 @@ class OperationNodeView extends HtmlNode {
   }>> | null = null;
 
   constructor(props: IHtmlNodeProps) {
-    super(props)
+    super(props);
     this.root = document.createElement('div');
     this.root.style.width = '100%';
     this.root.style.height = '100%';
@@ -28,12 +28,12 @@ class OperationNodeView extends HtmlNode {
       id: this.props.model.properties.id,
       isSelected: this.props.model.isSelected,
       isHovered: this.props.model.isHovered
-    }
+    };
     if (this.preProperties && this.preProperties === JSON.stringify(data)) {
       return false;
     }
-    this.preProperties = JSON.stringify(data)
-    return true
+    this.preProperties = JSON.stringify(data);
+    return true;
   }
 
   setHtml(rootEl: SVGForeignObjectElement): void {
@@ -45,7 +45,7 @@ class OperationNodeView extends HtmlNode {
         isHovered: this.props.model.isHovered,
         graphModel: this.props.graphModel,
         model: this.props.model
-      }
+      };
     } else {
       // @ts-expect-error 暂时不解决
       this.vmProps = ref({
@@ -84,7 +84,7 @@ class OperationNodeModel extends HtmlNodeModel {
         name: 'right',
         id: `${id}_1`,
       },
-    ]
+    ];
   }
 }
 
@@ -92,4 +92,4 @@ export default {
   type: 'operation-node',
   model: OperationNodeModel,
   view: OperationNodeView
-}
+};

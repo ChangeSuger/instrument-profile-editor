@@ -17,12 +17,12 @@
 </template>
 
 <script setup lang="ts">
-import { TypographyParagraph, Tooltip } from '@arco-design/web-vue'
-import { HtmlNodeModel } from '@logicflow/core'
-import { computed } from 'vue'
-import CirclePlus from '../icons/CirclePlus.vue'
-import { NodeType } from '../common'
-import { initModelNodeData } from '../utils/inital'
+import { TypographyParagraph, Tooltip } from '@arco-design/web-vue';
+import { HtmlNodeModel } from '@logicflow/core';
+import { computed } from 'vue';
+import CirclePlus from '../icons/CirclePlus.vue';
+import { NodeType } from '../common';
+import { initModelNodeData } from '../utils/inital';
 
 const props = defineProps({
   properties: {
@@ -35,13 +35,13 @@ const props = defineProps({
   },
   isSelected: Boolean,
   isHovered: Boolean,
-})
+});
 
-const isActive = computed(() => props.isHovered || props.isSelected)
+const isActive = computed(() => props.isHovered || props.isSelected);
 
 function addNode() {
-  const nodeId = props.model.id
-  const graphModel = props.model.graphModel
+  const nodeId = props.model.id;
+  const graphModel = props.model.graphModel;
   const newNode = graphModel.addNode({
     type: 'model-node',
     x: 350,
@@ -51,17 +51,17 @@ function addNode() {
       parentId: nodeId,
       ...initModelNodeData(),
     },
-  })
+  });
   graphModel.addEdge({
     type: 'polyline',
     sourceNodeId: nodeId,
     targetNodeId: newNode.id,
-  })
+  });
   graphModel.clearSelectElements();
   newNode.setSelected(true);
   // @ts-expect-error 外部手动触发事件，没必要遵守类型
-  graphModel.eventCenter.emit('node:click', { data: newNode.getData() })
-  graphModel.eventCenter.emit('custom:layout', {})
+  graphModel.eventCenter.emit('node:click', { data: newNode.getData() });
+  graphModel.eventCenter.emit('custom:layout', {});
 }
 </script>
 

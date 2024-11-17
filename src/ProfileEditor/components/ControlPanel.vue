@@ -32,60 +32,60 @@
 </template>
 
 <script setup lang="ts">
-import { Message } from '@arco-design/web-vue'
-import xml2js from 'xml2js'
-import { xmlData2ProfileData, profileData2XmlData, adaptorIn, adaptorOut } from '../utils/adaptor'
-import LogicFlow from '@logicflow/core'
-import { NodeType } from '../common'
+import { Message } from '@arco-design/web-vue';
+import xml2js from 'xml2js';
+import { xmlData2ProfileData, profileData2XmlData, adaptorIn, adaptorOut } from '../utils/adaptor';
+import LogicFlow from '@logicflow/core';
+import { NodeType } from '../common';
 
 const props = defineProps({
   lf: LogicFlow,
-})
+});
 
 function handleImport() {
-  const input = document.createElement('input')
-  input.type = 'file'
-  input.accept = '.xml'
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.xml';
   input.onchange = async (e) => {
-    const file = (e.target as HTMLInputElement).files?.[0]
-    if (!file) return
-    const reader = new FileReader()
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
     reader.onload = async (e) => {
-      const xml = e.target?.result as string
-      const parser = new xml2js.Parser()
+      const xml = e.target?.result as string;
+      const parser = new xml2js.Parser();
       parser.parseString(xml, (err, result) => {
         if (err) {
-          Message.error('配置文件解析失败')
-          return
+          Message.error('配置文件解析失败');
+          return;
         } else {
           props.lf?.render(adaptorIn(xmlData2ProfileData(result)));
           props.lf?.emit('custom:layout', {});
         }
-      })
-    }
-    reader.readAsText(file)
-  }
-  input.click()
+      });
+    };
+    reader.readAsText(file);
+  };
+  input.click();
 }
 
 function handleExport() {
-  const builder = new xml2js.Builder()
-  const xml = builder.buildObject(profileData2XmlData((adaptorOut(props.lf!.getGraphRawData()))))
-  const blob = new Blob([xml], { type: 'text/xml' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = 'profile.xml'
-  a.click()
-  URL.revokeObjectURL(url)
+  const builder = new xml2js.Builder();
+  const xml = builder.buildObject(profileData2XmlData((adaptorOut(props.lf!.getGraphRawData()))));
+  const blob = new Blob([xml], { type: 'text/xml' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'profile.xml';
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 function handleZoomIn() {
-  props.lf?.zoom(true)
+  props.lf?.zoom(true);
 }
 
 function handleZoomOut() {
-  props.lf?.zoom(false)
+  props.lf?.zoom(false);
 }
 
 function handleZoomReset() {

@@ -30,13 +30,13 @@
 </template>
 
 <script setup lang="ts">
-import { TypographyParagraph, Tooltip } from '@arco-design/web-vue'
-import { HtmlNodeModel } from '@logicflow/core'
-import { computed, onMounted, onBeforeUnmount, ref } from 'vue'
-import CirclePlus from '../icons/CirclePlus.vue'
-import ArrowLeft from '../icons/ArrowLeft.vue'
-import { NodeType } from '../common'
-import { initConfigNodeData } from '../utils/inital'
+import { TypographyParagraph, Tooltip } from '@arco-design/web-vue';
+import { HtmlNodeModel } from '@logicflow/core';
+import { computed, onMounted, onBeforeUnmount, ref } from 'vue';
+import CirclePlus from '../icons/CirclePlus.vue';
+import ArrowLeft from '../icons/ArrowLeft.vue';
+import { NodeType } from '../common';
+import { initConfigNodeData } from '../utils/inital';
 
 const props = defineProps({
   properties: {
@@ -50,14 +50,14 @@ const props = defineProps({
   isSelected: Boolean,
   isHovered: Boolean,
   isFloded: Boolean,
-})
+});
 
-const isActive = computed(() => props.isHovered || props.isSelected)
+const isActive = computed(() => props.isHovered || props.isSelected);
 const hasChild = ref(false);
 
 function addNode() {
-  const nodeId = props.model.id
-  const graphModel = props.model.graphModel
+  const nodeId = props.model.id;
+  const graphModel = props.model.graphModel;
   const newNode = graphModel.addNode({
     type: 'config-node',
     x: 600,
@@ -67,33 +67,33 @@ function addNode() {
       parentId: nodeId,
       ...initConfigNodeData(),
     },
-  })
+  });
   graphModel.addEdge({
     type: 'polyline',
     sourceNodeId: nodeId,
     targetNodeId: newNode.id,
-  })
+  });
   graphModel.clearSelectElements();
   newNode.setSelected(true);
   // @ts-expect-error 外部手动触发事件，没必要遵守类型
-  graphModel.eventCenter.emit('node:click', { data: newNode.getData() })
-  graphModel.eventCenter.emit('custom:layout', {})
+  graphModel.eventCenter.emit('node:click', { data: newNode.getData() });
+  graphModel.eventCenter.emit('custom:layout', {});
 }
 
 function flodNode() {
   props.model.setProperty('isFloded', true);
-  const nodeId = props.model.id
-  const graphModel = props.model.graphModel
-  const nodes = graphModel.getNodeOutgoingNode(nodeId)
-  const edges = graphModel.getNodeOutgoingEdge(nodeId)
+  const nodeId = props.model.id;
+  const graphModel = props.model.graphModel;
+  const nodes = graphModel.getNodeOutgoingNode(nodeId);
+  const edges = graphModel.getNodeOutgoingEdge(nodeId);
   for (const node of nodes) {
     node.visible = false;
     // 进一步折叠配置节点
     if (node.properties.isFloded) {
       continue;
     }
-    const nodes = graphModel.getNodeOutgoingNode(node.id)
-    const edges = graphModel.getNodeOutgoingEdge(node.id)
+    const nodes = graphModel.getNodeOutgoingNode(node.id);
+    const edges = graphModel.getNodeOutgoingEdge(node.id);
     for (const node of nodes) {
       node.visible = false;
     }
@@ -104,23 +104,23 @@ function flodNode() {
   for (const edge of edges) {
     edge.visible = false;
   }
-  graphModel.eventCenter.emit('custom:layout', {})
+  graphModel.eventCenter.emit('custom:layout', {});
 }
 
 function unflodNode() {
   props.model.setProperty('isFloded', false);
-  const nodeId = props.model.id
-  const graphModel = props.model.graphModel
-  const nodes = graphModel.getNodeOutgoingNode(nodeId)
-  const edges = graphModel.getNodeOutgoingEdge(nodeId)
+  const nodeId = props.model.id;
+  const graphModel = props.model.graphModel;
+  const nodes = graphModel.getNodeOutgoingNode(nodeId);
+  const edges = graphModel.getNodeOutgoingEdge(nodeId);
   for (const node of nodes) {
     node.visible = true;
     // 进一步展开配置节点
     if (node.properties.isFloded) {
       continue;
     }
-    const nodes = graphModel.getNodeOutgoingNode(node.id)
-    const edges = graphModel.getNodeOutgoingEdge(node.id)
+    const nodes = graphModel.getNodeOutgoingNode(node.id);
+    const edges = graphModel.getNodeOutgoingEdge(node.id);
     for (const node of nodes) {
       node.visible = true;
     }
@@ -131,7 +131,7 @@ function unflodNode() {
   for (const edge of edges) {
     edge.visible = true;
   }
-  graphModel.eventCenter.emit('custom:layout', {})
+  graphModel.eventCenter.emit('custom:layout', {});
 }
 
 function updateHasChild() {
@@ -143,14 +143,14 @@ function updateHasChild() {
 
 onMounted(() => {
   updateHasChild();
-  props.model.graphModel.eventCenter.on('edge:add', updateHasChild)
-  props.model.graphModel.eventCenter.on('node:delete', updateHasChild)
-})
+  props.model.graphModel.eventCenter.on('edge:add', updateHasChild);
+  props.model.graphModel.eventCenter.on('node:delete', updateHasChild);
+});
 
 onBeforeUnmount(() => {
-  props.model.graphModel.eventCenter.off('edge:add', updateHasChild)
-  props.model.graphModel.eventCenter.off('node:delete', updateHasChild)
-})
+  props.model.graphModel.eventCenter.off('edge:add', updateHasChild);
+  props.model.graphModel.eventCenter.off('node:delete', updateHasChild);
+});
 </script>
 
 <style scoped lang="scss">

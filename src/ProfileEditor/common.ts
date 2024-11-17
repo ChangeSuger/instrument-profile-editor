@@ -45,7 +45,7 @@ export const COMMUNICATION_TYPE_OPTIONS = [
   { value: 'RS232', label: 'RS232' },
   { value: 'RS485', label: 'RS485' },
   { value: 'TCP', label: 'TCP' },
-]
+];
 
 /**
  * @description 方法参数类型

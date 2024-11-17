@@ -13,7 +13,7 @@ export function initModelNodeData(): ModelNodeData & FlodedData {
     isFloded: false,
     id: '',
     configType: 'NI-VISA',
-  }
+  };
 }
 
 export function initConfigNodeData(): ConfigNodeData & FlodedData {
@@ -36,7 +36,7 @@ export function initConfigNodeData(): ConfigNodeData & FlodedData {
       ip: '',
       port: '',
     },
-  }
+  };
 }
 
 export function initOperationNodeData(): OperationNodeData {
@@ -47,5 +47,5 @@ export function initOperationNodeData(): OperationNodeData {
     command: '',
     methods: [],
     measureModes: [],
-  }
+  };
 }

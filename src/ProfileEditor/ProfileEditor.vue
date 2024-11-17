@@ -16,12 +16,19 @@ import { ref, onMounted } from 'vue';
 import LogicFlow from '@logicflow/core';
 import '@logicflow/core/lib/style/index.css';
 import { v4 as uuidv4 } from 'uuid';
+import xml2js from 'xml2js';
+import { Message } from '@arco-design/web-vue';
 
 import { InstrumentNode, ModelNode, ConfigNode, OperationNode } from './node';
-
+import { xmlData2ProfileData, profileData2XmlData, adaptorIn, adaptorOut } from './utils/adaptor';
 import { NodeType, POSITION_X } from './common';
 
-const lf = ref<LogicFlow>()
+defineExpose({
+  dataImport,
+  dataExport,
+});
+
+const lf = ref<LogicFlow>();
 const nodeEditDrawerRef = ref<InstanceType<typeof NodeEditDrawer>>();
 
 const dataInit = {
@@ -38,10 +45,28 @@ const dataInit = {
     },
   ],
   edges: [],
+};
+
+function dataImport(xml: string) {
+  const parser = new xml2js.Parser();
+  parser.parseString(xml, (err, result) => {
+    if (err) {
+      Message.error('配置文件解析失败');
+      return;
+    } else {
+      lf.value?.render(adaptorIn(xmlData2ProfileData(result)));
+      lf.value?.emit('custom:layout', {});
+    }
+  });
+}
+
+function dataExport() {
+  const builder = new xml2js.Builder();
+  return builder.buildObject(profileData2XmlData((adaptorOut(lf.value!.getGraphRawData()))));
 }
 
 onMounted(() => {
-  const lfContainer = document.getElementById('lf-container')!
+  const lfContainer = document.getElementById('lf-container')!;
   lf.value = new LogicFlow({
     container: lfContainer,
     stopScrollGraph: false,
@@ -52,36 +77,36 @@ onMounted(() => {
     nodeTextEdit: false,
     edgeTextEdit: false,
     textEdit: false,
-  })
-  lf.value.batchRegister([InstrumentNode, ModelNode, ConfigNode, OperationNode])
+  });
+  lf.value.batchRegister([InstrumentNode, ModelNode, ConfigNode, OperationNode]);
 
   lf.value.on('custom:layout', () => {
-    let height = 100
-    const deltaY = 50
-    const graphData = lf.value!.getGraphRawData()
-    let startNode: LogicFlow.NodeData = graphData.nodes[0]
-    const nodeMap = new Map<string, LogicFlow.NodeData[]>()
+    let height = 100;
+    const deltaY = 50;
+    const graphData = lf.value!.getGraphRawData();
+    let startNode: LogicFlow.NodeData = graphData.nodes[0];
+    const nodeMap = new Map<string, LogicFlow.NodeData[]>();
     graphData.nodes.forEach((node) => {
-      const parentId = node.properties!.parentId
+      const parentId = node.properties!.parentId;
       if (parentId) {
         if (nodeMap.has(parentId)) {
-          nodeMap.get(parentId)!.push(node)
+          nodeMap.get(parentId)!.push(node);
         } else {
-          nodeMap.set(parentId, [node])
+          nodeMap.set(parentId, [node]);
         }
       }
       if (node.type === 'instrument-node') {
-        startNode = node
+        startNode = node;
       }
-    })
+    });
 
     if (startNode) {
-      lf.value!.graphModel.moveNode2Coordinate(startNode.id, POSITION_X['instrument-node'], height)
+      lf.value!.graphModel.moveNode2Coordinate(startNode.id, POSITION_X['instrument-node'], height);
       nodeMap.get(startNode.id)?.forEach((node, index) => {
         if (index > 0) {
-          height += deltaY
+          height += deltaY;
         }
-        lf.value!.graphModel.moveNode2Coordinate(node.id, POSITION_X['model-node'], height)
+        lf.value!.graphModel.moveNode2Coordinate(node.id, POSITION_X['model-node'], height);
 
         if (node.properties?.isFloded) {
           return;
@@ -89,9 +114,9 @@ onMounted(() => {
 
         nodeMap.get(node.id)?.forEach((node, index) => {
           if (index > 0) {
-            height += deltaY
+            height += deltaY;
           }
-          lf.value!.graphModel.moveNode2Coordinate(node.id, POSITION_X['config-node'], height)
+          lf.value!.graphModel.moveNode2Coordinate(node.id, POSITION_X['config-node'], height);
 
           if (node.properties?.isFloded) {
             return;
@@ -99,12 +124,12 @@ onMounted(() => {
 
           nodeMap.get(node.id)?.forEach((node, index) => {
             if (index > 0) {
-              height += deltaY
+              height += deltaY;
             }
-            lf.value!.graphModel.moveNode2Coordinate(node.id, POSITION_X['operation-node'], height)
-          })
-        })
-      })
+            lf.value!.graphModel.moveNode2Coordinate(node.id, POSITION_X['operation-node'], height);
+          });
+        });
+      });
     }
   });
 
