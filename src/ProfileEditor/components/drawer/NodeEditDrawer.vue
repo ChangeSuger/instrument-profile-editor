@@ -185,7 +185,7 @@ function handleDeleteNode(nodeId: string, nodeType: string, deepth = 0) {
   right: 0;
   display: flex;
   flex-direction: column;
-  border: 2px solid #d3d3d3;
+  border-left: 2px solid #d3d3d3;
   background-color: #fffefe;
   z-index: 10;
 
