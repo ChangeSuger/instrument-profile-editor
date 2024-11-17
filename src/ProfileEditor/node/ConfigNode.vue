@@ -162,8 +162,8 @@ onBeforeUnmount(() => {
       background: rgb(204, 92, 90);
 
       img {
-        width: 14px;
-        height: 14px;
+        width: 18px;
+        height: 18px;
         filter: drop-shadow(#ffffff 100px 0);
         transform: translateX(-100px);
       }

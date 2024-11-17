@@ -94,8 +94,8 @@ function addNode() {
       background: rgb(90, 90, 204);
 
       img {
-        width: 14px;
-        height: 14px;
+        width: 18px;
+        height: 18px;
         filter: drop-shadow(#ffffff 100px 0);
         transform: translateX(-100px);
       }
