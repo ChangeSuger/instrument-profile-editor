@@ -24,6 +24,9 @@ export const NODE_WIDTH = 150;
 export const NODE_HEIGHT = 30;
 export const NODE_WIDTH_HALF = NODE_WIDTH / 2;
 
+/**
+ * @description 配置类型
+ */
 export const CONFIG_TYPE_OPTIONS = [
   { value: 'NI-VISA', label: 'NI-VISA' },
   { value: 'FUNCTION', label: 'FUNCTION' },
@@ -35,12 +38,18 @@ export const BOOLEAN_STRING_OPTIONS = [
   { value: 'false', label: '否' },
 ];
 
+/**
+ * @description 通讯配置-通讯类型
+ */
 export const COMMUNICATION_TYPE_OPTIONS = [
   { value: 'RS232', label: 'RS232' },
   { value: 'RS485', label: 'RS485' },
   { value: 'TCP', label: 'TCP' },
 ]
 
+/**
+ * @description 方法参数类型
+ */
 export const PARAMETER_TYPE_OPTIONS = [
   { value: 'System.Boolean', label: 'Boolean' },
   { value: 'System.Char', label: 'Char' },
@@ -50,6 +59,9 @@ export const PARAMETER_TYPE_OPTIONS = [
   { value: 'System.Single', label: 'Single' },
 ];
 
+/**
+ * @description 通讯配置-停止位
+ */
 export const STOP_BITS_OPTIONS = [
   { value: '0', label: 'None' },
   { value: '1', label: 'One' },
@@ -57,6 +69,9 @@ export const STOP_BITS_OPTIONS = [
   { value: '3', label: 'OnePointFive' },
 ];
 
+/**
+ * @description 通讯配置-奇偶校验
+ */
 export const PARITY_OPTIONS = [
   { value: '0', label: 'None' },
   { value: '1', label: 'Odd' },
@@ -65,6 +80,9 @@ export const PARITY_OPTIONS = [
   { value: '4', label: 'Space' },
 ];
 
+/**
+ * @description 通讯配置-握手协议
+ */
 export const HAND_SHAKE_OPTIONS = [
   { value: '0', label: 'None' },
   { value: '1', label: 'Xon/Xoff' },

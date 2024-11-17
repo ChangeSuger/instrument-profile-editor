@@ -19,11 +19,7 @@
         <a-space>
           <a-input v-model="parameter.value" allow-clear size="mini">
             <template #prepend>
-              <a-select :style="{ width: '100px' }" v-model="parameter.type" size="mini">
-                <a-option v-for="option in PARAMETER_TYPE_OPTIONS" :key="option.value" :value="option.value">
-                  {{ option.label }}
-                </a-option>
-              </a-select>
+              <a-select :style="{ width: '100px' }" v-model="parameter.type" size="mini" :options="PARAMETER_TYPE_OPTIONS" />
             </template>
           </a-input>
         </a-space>

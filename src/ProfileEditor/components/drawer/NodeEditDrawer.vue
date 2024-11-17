@@ -25,31 +25,37 @@
       <InstrumentNodeForm
         v-if="nodeType === NodeType.Instrument"
         v-model:formData="(nodeData!.properties as InstrumentNodeData)"
+        ref="instrumentNodeFormRef"
       />
 
       <ModelNodeForm
         v-else-if="nodeType === NodeType.Model"
         v-model:formData="(nodeData!.properties as ModelNodeData)"
+        ref="modelNodeFormRef"
       />
 
       <ConfigNodeForm
         v-else-if="nodeType === NodeType.Config"
         v-model:formData="(nodeData!.properties as ConfigNodeData)"
+        ref="configNodeFormRef"
       />
 
       <NiVisaOperationNodeForm
         v-else-if="nodeType === NodeType.NI_VISA_OPERATION"
         v-model:formData="(nodeData!.properties as OperationNodeData)"
+        ref="niVisaOperationNodeFormRef"
       />
 
       <FunctionOperationNodeForm
         v-else-if="nodeType === NodeType.FUNCTION_OPERATION"
         v-model:formData="(nodeData!.properties as OperationNodeData)"
+        ref="functionOperationNodeFormRef"
       />
 
       <CustomOperationNodeForm
         v-else-if="nodeType === NodeType.CUSTOM_OPERATION"
         v-model:formData="(nodeData!.properties as OperationNodeData)"
+        ref="customOperationNodeFormRef"
       />
     </div>
 
@@ -63,7 +69,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import LogicFlow from '@logicflow/core'
-import { NodeType } from '@/ProfileEditor/common'
+import { NodeType } from '../../common'
 import { IconDelete } from '@arco-design/web-vue/es/icon'
 
 import InstrumentNodeForm from './InstrumentNodeForm.vue'
@@ -90,6 +96,13 @@ defineExpose({
 })
 
 const nodeData = ref<LogicFlow.NodeData>()
+
+const instrumentNodeFormRef = ref<InstanceType<typeof InstrumentNodeForm>>();
+const modelNodeFormRef = ref<InstanceType<typeof ModelNodeForm>>();
+const configNodeFormRef = ref<InstanceType<typeof ConfigNodeForm>>();
+const niVisaOperationNodeFormRef = ref<InstanceType<typeof NiVisaOperationNodeForm>>();
+const functionOperationNodeFormRef = ref<InstanceType<typeof FunctionOperationNodeForm>>();
+const customOperationNodeFormRef = ref<InstanceType<typeof CustomOperationNodeForm>>();
 
 const nodeType = computed(() => {
   return nodeData.value?.properties?.type
@@ -123,7 +136,28 @@ function closeDrawer() {
   visible.value = false
 }
 
-function handleConfirm() {
+async function validate() {
+  if (nodeType.value === NodeType.Instrument) {
+    return instrumentNodeFormRef.value?.validate();
+  } else if (nodeType.value === NodeType.Model) {
+    return modelNodeFormRef.value?.validate();
+  } else if (nodeType.value === NodeType.Config) {
+    return configNodeFormRef.value?.validate()
+  } else if (nodeType.value === NodeType.NI_VISA_OPERATION) {
+    return niVisaOperationNodeFormRef.value?.validate();
+  } else if (nodeType.value === NodeType.FUNCTION_OPERATION) {
+    return functionOperationNodeFormRef.value?.validate();
+  } else if (nodeType.value === NodeType.CUSTOM_OPERATION) {
+    // return customOperationNodeFormRef.value?.validate()
+  }
+  return true
+}
+
+async function handleConfirm() {
+  const error = await validate();
+  if (error) {
+    return
+  }
   props.lf!.setProperties(nodeData.value!.id, nodeData.value!.properties!)
   closeDrawer()
 }
