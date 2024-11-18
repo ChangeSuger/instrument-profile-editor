@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<设备类别 id="万用表">
+  <型号 id="DMM6500-0">
+    <配置方式>NI-VISA</配置方式>
+    <配置 id="NI-VISA">
+      <操作 id="采集直流电压" Parameter="" HasReturn="true">
+        <指令>abort;MEASure:VOLTage:DC?</指令>
+      </操作>
+      <操作 id="采集交流电压" Parameter="" HasReturn="true">
+        <指令>abort;MEASure:CURRent:AC?</指令>
+      </操作>
+      <操作 id="采集直流电流" Parameter="" HasReturn="true">
+        <指令>abort;MEASure:CURRent:DC?</指令>
+      </操作>
+      <操作 id="采集电阻" Parameter="" HasReturn="true">
+        <指令>abort;MEAS:RES?</指令>
+      </操作>
+    </配置>
+  </型号>
+  <型号 id="DMM6500-1">
+    <配置方式>FUNCTION</配置方式>
+    <配置 id="FUNCTION">
+      <类 Type="命名空间.类名, DLL模板" IsVISA="true"/>
+      <操作 id="连接检测" Parameter="" HasReturn="true">
+        <方法 Name="CheckConnect"/>
+      </操作>
+      <操作 id="PICO设置" Parameter="" HasReturn="true">
+        <方法 Name="setAmplitude">
+          <参数 Type="System.Int32" Value="5"/>
+          <参数 Type="System.String" Value="V"/>
+          <参数 Type="System.String" Value="AC"/>
+          <参数 Type="System.Int32" Value="1"/>
+        </方法>
+        <方法 Name="setAmplitude">
+          <参数 Type="System.Int32" Value="5"/>
+          <参数 Type="System.String" Value="V"/>
+          <参数 Type="System.String" Value="AC"/>
+          <参数 Type="System.Int32" Value="2"/>
+        </方法>
+        <方法 Name="setTime">
+          <参数 Type="System.Int32" Value="40000"/>
+          <参数 Type="System.Int32" Value="500"/>
+          <参数 Type="System.String" Value="us"/>
+        </方法>
+        <方法 Name="setBuffer">
+          <参数 Type="System.Int32" Value="1"/>
+        </方法>
+        <方法 Name="setBuffer">
+          <参数 Type="System.Int32" Value="2"/>
+        </方法>
+      </操作>
+    </配置>
+  </型号>
+  <型号 id="DMM6500-2">
+    <配置方式>CUSTOM</配置方式>
+    <配置 id="CUSTOM">
+      <通信方法>TCP</通信方法>
+      <TCP>
+        <IP>192.172.0.1</IP>
+        <端口>80</端口>
+      </TCP>
+      <操作 id="切换">
+        <测量模式 id="S01">
+          <工位 id="1">
+            <字节流 send="0x00" receive="0x00"/>
+            <字节流 send="0x00" receive="0x00"/>
+          </工位>
+          <工位 id="2">
+            <字节流 send="0x00" receive="0x00"/>
+            <字节流 send="0x00" receive="0x00"/>
+          </工位>
+          <工位 id="3">
+            <字节流 send="0x00" receive="0x00"/>
+            <字节流 send="0x00" receive="0x00"/>
+          </工位>
+          <工位 id="4">
+            <字节流 send="0x00" receive="0x00"/>
+            <字节流 send="0x00" receive="0x00"/>
+          </工位>
+        </测量模式>
+        <测量模式 id="S02">
+          <工位 id="1">
+            <字节流 send="0x00" receive="0x00"/>
+            <字节流 send="0x00" receive="0x00"/>
+          </工位>
+          <工位 id="2">
+            <字节流 send="0x00" receive="0x00"/>
+            <字节流 send="0x00" receive="0x00"/>
+          </工位>
+          <工位 id="3">
+            <字节流 send="0x00" receive="0x00"/>
+            <字节流 send="0x00" receive="0x00"/>
+          </工位>
+          <工位 id="4">
+            <字节流 send="0x00" receive="0x00"/>
+            <字节流 send="0x00" receive="0x00"/>
+          </工位>
+        </测量模式>
+      </操作>
+    </配置>
+  </型号>
+</设备类别>
