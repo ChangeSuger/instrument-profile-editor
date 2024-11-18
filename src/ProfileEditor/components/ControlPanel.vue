@@ -59,6 +59,7 @@ function handleImport() {
           return;
         } else {
           props.lf?.render(adaptorIn(xmlData2ProfileData(result)));
+          props.lf?.emit('blank:click', { e: new MouseEvent('click') });
           props.lf?.emit('custom:layout', {});
         }
       });

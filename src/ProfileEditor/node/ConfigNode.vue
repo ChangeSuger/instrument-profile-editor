@@ -1,6 +1,6 @@
 <template>
-  <div class="node-wrap" :class="{ hovered: isHovered, selected: isSelected }">
-    <div class="node-title">
+  <div class="node-wrap">
+    <div class="node-title" :class="{ error: isError }">
       <span class="node-icon">
         <img src="../assets/bolt.svg" />
       </span>
@@ -26,13 +26,16 @@
         </Tooltip>
       </template>
     </div>
+    <div class="error-info" v-if="isError && isActive">
+      {{ errorInfo }}
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { TypographyParagraph, Tooltip } from '@arco-design/web-vue';
 import { HtmlNodeModel } from '@logicflow/core';
-import { computed, onMounted, onBeforeUnmount, ref } from 'vue';
+import { computed, onMounted, onBeforeUnmount, ref, watch } from 'vue';
 import CirclePlus from '../icons/CirclePlus.vue';
 import ArrowLeft from '../icons/ArrowLeft.vue';
 import { OPERATION_NODE_TYPE_MAP } from '../common';
@@ -55,6 +58,47 @@ const props = defineProps({
 
 const isActive = computed(() => props.isHovered || props.isSelected);
 const hasChild = ref(false);
+const isError = computed(() => {
+  if (props.properties.id === 'NI-VISA') {
+    return false;
+  } else if (props.properties.id === 'FUNCTION') {
+    return (
+      props.properties.spaceName === '' ||
+      props.properties.className === '' ||
+      props.properties.dllTemplate === ''
+    );
+  } else {
+    if (props.properties.communicationType === 'TCP') {
+      return (
+        props.properties.ip === '' ||
+        props.properties.port === ''
+      );
+    } else {
+      return (
+        props.properties.communicationConfig.baudRate === '' ||
+        props.properties.communicationConfig.dataBits === '' ||
+        props.properties.communicationConfig.bufferBytes === '' ||
+        props.properties.communicationConfig.timeout === ''
+      );
+    }
+  }
+});
+
+const errorInfo = '信息不完整';
+
+watch(() => isError.value, (value) => {
+  props.model.setProperty('isError', value);
+}, { immediate: true });
+
+watch(() => props.properties.id, () => {
+  const graphModel = props.model.graphModel;
+  const nodeId = props.model.id;
+  const childs = graphModel.getNodeOutgoingNode(nodeId);
+  for (const node of childs) {
+    graphModel.deleteNode(node.id);
+  }
+  graphModel.eventCenter.emit('custom:layout', {});
+});
 
 function addNode() {
   const nodeId = props.model.id;
@@ -152,6 +196,10 @@ onBeforeUnmount(() => {
     background: #fff;
     overflow: hidden;
 
+    &.error {
+      border: 3px dashed rgb(220, 16, 16);
+    }
+
     .node-icon {
       display: inline-block;
       width: 26px;
@@ -238,6 +286,16 @@ onBeforeUnmount(() => {
         fill: rgb(27, 130, 27);
       }
     }
+  }
+
+  .error-info {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    font-size: 12px;
+    color: red;
+    text-align: center;
+    transform: translateY(105%);
   }
 }
 </style>

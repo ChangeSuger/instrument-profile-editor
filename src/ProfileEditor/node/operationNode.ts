@@ -1,4 +1,4 @@
-import { HtmlNode, HtmlNodeModel, type IHtmlNodeProps, type Model, GraphModel, BaseNodeModel } from '@logicflow/core';
+import { HtmlNode, HtmlNodeModel, type IHtmlNodeProps, type Model, BaseNodeModel } from '@logicflow/core';
 import OperationNode from './OperationNode.vue';
 import { createApp, h, ref } from 'vue';
 import { NODE_WIDTH, NODE_HEIGHT } from '../common';
@@ -11,7 +11,6 @@ class OperationNodeView extends HtmlNode {
     properties: object;
     isSelected: boolean;
     isHovered: boolean;
-    graphModel: GraphModel;
     model: BaseNodeModel;
   }>> | null = null;
 
@@ -43,7 +42,6 @@ class OperationNodeView extends HtmlNode {
         properties: this.props.model.properties,
         isSelected: this.props.model.isSelected,
         isHovered: this.props.model.isHovered,
-        graphModel: this.props.graphModel,
         model: this.props.model
       };
     } else {
@@ -52,7 +50,6 @@ class OperationNodeView extends HtmlNode {
         properties: this.props.model.properties,
         isSelected: this.props.model.isSelected,
         isHovered: this.props.model.isHovered,
-        graphModel: this.props.graphModel,
         model: this.props.model,
       });
       this.vm = createApp({

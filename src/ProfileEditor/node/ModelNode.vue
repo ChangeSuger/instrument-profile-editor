@@ -1,6 +1,6 @@
 <template>
-  <div class="node-wrap" :class="{ hovered: isHovered, selected: isSelected }">
-    <div class="node-title">
+  <div class="node-wrap">
+    <div class="node-title" :class="{ error: isError }">
       <span class="node-icon">
         <img src="../assets/database.svg" />
       </span>
@@ -26,13 +26,17 @@
         </Tooltip>
       </template>
     </div>
+
+    <div class="error-info" v-if="isError && isActive">
+      {{ errorInfo }}
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { TypographyParagraph, Tooltip } from '@arco-design/web-vue';
 import { HtmlNodeModel } from '@logicflow/core';
-import { computed, onMounted, onBeforeUnmount, ref } from 'vue';
+import { computed, onMounted, onBeforeUnmount, ref, watch } from 'vue';
 import CirclePlus from '../icons/CirclePlus.vue';
 import ArrowLeft from '../icons/ArrowLeft.vue';
 import { NodeType } from '../common';
@@ -54,6 +58,13 @@ const props = defineProps({
 
 const isActive = computed(() => props.isHovered || props.isSelected);
 const hasChild = ref(false);
+const isError = computed(() => props.properties.id === '');
+
+const errorInfo = '信息不完整';
+
+watch(() => isError.value, (value) => {
+  props.model.setProperty('isError', value);
+}, { immediate: true });
 
 function addNode() {
   const nodeId = props.model.id;
@@ -172,6 +183,10 @@ onBeforeUnmount(() => {
     background: #fff;
     overflow: hidden;
 
+    &.error {
+      border: 3px dashed rgb(220, 16, 16);
+    }
+
     .node-icon {
       display: inline-block;
       width: 26px;
@@ -258,6 +273,16 @@ onBeforeUnmount(() => {
         fill: rgb(27, 130, 27);
       }
     }
+  }
+
+  .error-info {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    font-size: 12px;
+    color: red;
+    text-align: center;
+    transform: translateY(105%);
   }
 }
 </style>

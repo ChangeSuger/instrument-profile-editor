@@ -5,11 +5,11 @@ import type {
   XMLModelData,
   XMLConfigDataMap,
   XMLCommunicationConfigDataMap,
-} from "../types";
+} from '../types';
 import { v4 as uuidv4 } from 'uuid';
-import type LogicFlow from "@logicflow/core";
-import { NodeType, NODE_WIDTH_HALF } from "../common";
-import { initConfigNodeData, initOperationNodeData } from "./inital";
+import type LogicFlow from '@logicflow/core';
+import { NodeType, NODE_WIDTH_HALF } from '../common';
+import { initConfigNodeData, initOperationNodeData } from './inital';
 
 /**
  * 将 xml2js 解析 xml 得到的数据适配为配置文件数据

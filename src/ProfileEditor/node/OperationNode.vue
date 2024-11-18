@@ -1,6 +1,6 @@
 <template>
-  <div class="node-wrap" :class="{ hovered: isHovered, selected: isSelected }">
-    <div class="node-title">
+  <div class="node-wrap">
+    <div class="node-title" :class="{ error: isError }">
       <span class="node-icon">
         <img src="../assets/zap.svg" />
       </span>
@@ -8,21 +8,22 @@
         {{ properties.id || '操作' }}
       </TypographyParagraph>
     </div>
+
+    <div class="error-info" v-if="isError && isActive">
+      {{ errorInfo }}
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { TypographyParagraph } from '@arco-design/web-vue';
-import { GraphModel, BaseNodeModel } from '@logicflow/core';
-// import { computed } from 'vue';
+import { BaseNodeModel } from '@logicflow/core';
+import { computed, watch } from 'vue';
+import { OPERATION_NODE_TYPE_MAP } from '../common';
 
-defineProps({
+const props = defineProps({
   properties: {
     type: Object,
-    required: true,
-  },
-  graphModel: {
-    type: GraphModel,
     required: true,
   },
   model: {
@@ -33,7 +34,25 @@ defineProps({
   isHovered: Boolean,
 });
 
-// const isActive = computed(() => props.isHovered || props.isSelected);
+const isActive = computed(() => props.isHovered || props.isSelected);
+const isError = computed(() => {
+  if (props.properties.type === OPERATION_NODE_TYPE_MAP['NI-VISA']) {
+    return (
+      props.properties.id === '' ||
+      props.properties.command === ''
+    );
+  } else if (props.properties.type === OPERATION_NODE_TYPE_MAP['FUNCTION']) {
+    return props.properties.id === '';
+  } else {
+    return props.properties.id === '';
+  }
+});
+
+const errorInfo = '信息不完整';
+
+watch(() => isError.value, (value) => {
+  props.model.setProperty('isError', value);
+}, { immediate: true });
 </script>
 
 <style scoped lang="scss">
@@ -54,6 +73,10 @@ defineProps({
     border-radius: 4px;
     background: #fff;
     overflow: hidden;
+
+    &.error {
+      border: 3px dashed rgb(220, 16, 16);
+    }
 
     .node-icon {
       display: inline-block;
@@ -78,6 +101,16 @@ defineProps({
       flex: 1;
       text-align: center;
     }
+  }
+
+  .error-info {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    font-size: 12px;
+    color: red;
+    text-align: center;
+    transform: translateY(105%);
   }
 }
 </style>

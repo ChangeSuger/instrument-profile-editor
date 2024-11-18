@@ -1,4 +1,4 @@
-import type { InstrumentNodeData, ModelNodeData, ConfigNodeData, OperationNodeData } from "../types";
+import type { InstrumentNodeData, ModelNodeData, ConfigNodeData, OperationNodeData } from '../types';
 
 type FlodedData = { isFloded: boolean };
 
