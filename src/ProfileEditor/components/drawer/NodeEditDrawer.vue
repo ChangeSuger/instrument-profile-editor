@@ -148,7 +148,7 @@ async function validate() {
   } else if (nodeType.value === NodeType.FUNCTION_OPERATION) {
     return functionOperationNodeFormRef.value?.validate();
   } else if (nodeType.value === NodeType.CUSTOM_OPERATION) {
-    // return customOperationNodeFormRef.value?.validate()
+    return customOperationNodeFormRef.value?.validate();
   }
   return true;
 }
