@@ -1,4 +1,4 @@
-# PROFILE-EDITOR
+# INSTRUMENT-PROFILE-EDITOR
 
 基于 Vue3 + [LogicFlow](https://github.com/didi/LogicFlow) 实现的仪器配置文件编辑器。
 

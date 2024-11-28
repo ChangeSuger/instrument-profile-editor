@@ -2,23 +2,35 @@
   <div class="node-editor-drawer" :class="{ hidden: !visible }">
     <div class="node-editor-drawer-header">
       <span class="node-editor-drawer-title">{{ drawerTitle }}</span>
-      <a-popconfirm
-        v-if="nodeType !== NodeType.Instrument"
-        position="left"
-        type="warning"
-        content="确定删除该节点？"
-        ok-text="删除"
-        :ok-button-props="{ status: 'danger' }"
-        cancel-text="取消"
-        @ok="handleDeleteNode(nodeData!.id, nodeData!.type)"
-      >
-        <a-button size="small" status="danger">
+      <a-space>
+        <a-button
+          v-if="[NodeType.CUSTOM_OPERATION, NodeType.FUNCTION_OPERATION, NodeType.NI_VISA_OPERATION].includes(nodeType)"
+          size="small"
+          @click="douplicateNode"
+        >
           <template #icon>
-            <IconDelete />
+            <IconCopy />
           </template>
-          删除节点
+          复用节点
         </a-button>
-      </a-popconfirm>
+        <a-popconfirm
+          v-if="nodeType !== NodeType.Instrument"
+          position="left"
+          type="warning"
+          content="确定删除该节点？"
+          ok-text="删除"
+          :ok-button-props="{ status: 'danger' }"
+          cancel-text="取消"
+          @ok="handleDeleteNode(nodeData!.id, nodeData!.type)"
+        >
+          <a-button size="small" status="danger">
+            <template #icon>
+              <IconDelete />
+            </template>
+            删除节点
+          </a-button>
+        </a-popconfirm>
+      </a-space>
     </div>
 
     <div class="node-editor-drawer-body">
@@ -70,7 +82,8 @@
 import { ref, computed } from 'vue';
 import LogicFlow from '@logicflow/core';
 import { NodeType } from '../../common';
-import { IconDelete } from '@arco-design/web-vue/es/icon';
+import { IconDelete, IconCopy } from '@arco-design/web-vue/es/icon';
+import { cloneDeep } from 'lodash-es';
 
 import InstrumentNodeForm from './InstrumentNodeForm.vue';
 import ModelNodeForm from './ModelNodeForm.vue';
@@ -173,6 +186,22 @@ function handleDeleteNode(nodeId: string, nodeType: string, deepth = 0) {
     closeDrawer();
     props.lf!.emit('custom:layout', {});
   }
+}
+
+function douplicateNode() {
+  const properties = cloneDeep(nodeData.value!.properties);
+  const newNode = props.lf!.addNode({
+    type: 'operation-node',
+    x: 850,
+    y: 100,
+    properties,
+  });
+  props.lf!.addEdge({
+    type: 'polyline',
+    sourceNodeId: properties!.parentId,
+    targetNodeId: newNode.id,
+  });
+  props.lf!.emit('custom:layout', {});
 }
 </script>
 
