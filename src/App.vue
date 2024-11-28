@@ -13,6 +13,7 @@
 <script setup lang="ts">
 import LF from '@/ProfileEditor/ProfileEditor.vue';
 import { ref } from 'vue';
+import { Message } from '@arco-design/web-vue';
 
 const LFRef = ref<InstanceType<typeof LF>>();
 
@@ -22,7 +23,9 @@ async function loadExample() {
 }
 
 function check() {
-  LFRef.value?.check();
+  if (!LFRef.value?.check()) {
+    Message.success('校验通过');
+  }
 }
 </script>
 
